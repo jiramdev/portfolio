@@ -11,20 +11,21 @@ export async function generateMetadata({
 
   if (!project) {
     return {
-      title: "Project Not Found",
+      title: "project not found",
     };
   }
 
   const ogImage = project.poster || project.mediaUrl;
 
   return {
-    title: `${project.name} — ${project.tagline}`,
+    // This turns into "jiram | repstr", "jiram | ikea", etc.
+    title: project.name.toLowerCase(),
     description: project.summary,
     alternates: {
       canonical: `/projects/${project.slug}`,
     },
     openGraph: {
-      title: `${project.name} — ${project.tagline}`,
+      title: `jiram | ${project.name.toLowerCase()}`,
       description: project.summary,
       url: `/projects/${project.slug}`,
       type: "article",
@@ -34,14 +35,14 @@ export async function generateMetadata({
               url: ogImage,
               width: 1200,
               height: 630,
-              alt: `${project.name} Cover`,
+              alt: `${project.name} cover`,
             },
           ]
         : [],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${project.name} — ${project.tagline}`,
+      title: `jiram | ${project.name.toLowerCase()}`,
       description: project.summary,
       images: ogImage ? [ogImage] : [],
     },

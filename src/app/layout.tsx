@@ -20,6 +20,7 @@ const monoFont = JetBrains_Mono({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://jiram.nl";
+const siteDescription = "Frontend Developer & UI/UX Designer";
 
 export const viewport: Viewport = {
   themeColor: "#faf9f5",
@@ -30,24 +31,26 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Jiram — Frontend Developer & UI/UX Designer",
-    template: "%s | Jiram",
+    default: "jiram",
+    template: "jiram | %s",
   },
-  description:
-    "Portfolio of Jiram, specializing in design systems, high-performance web architecture, and craft-driven interactive interfaces.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
+  description: siteDescription,
   keywords: [
-    "Jiram",
+    "jiram",
     "Frontend Developer",
     "UI/UX Designer",
-    "Product Design",
-    "Next.js",
     "Design Systems",
-    "Web Application Development",
+    "Web Development",
     "Netherlands",
   ],
-  authors: [{ name: "Jiram", url: siteUrl }],
-  creator: "Jiram",
-  publisher: "Jiram",
+  authors: [{ name: "jiram", url: siteUrl }],
+  creator: "jiram",
+  publisher: "jiram",
   formatDetection: {
     email: false,
     address: false,
@@ -57,11 +60,10 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Jiram — Frontend Developer & UI/UX Designer",
-    description:
-      "Crafting high-performance web architecture, design systems, and thoughtful digital interfaces.",
+    title: "jiram",
+    description: siteDescription,
     url: siteUrl,
-    siteName: "Jiram Portfolio",
+    siteName: "jiram",
     locale: "en_US",
     type: "website",
     images: [
@@ -69,15 +71,14 @@ export const metadata: Metadata = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Jiram — Portfolio Preview",
+        alt: "jiram",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jiram — Frontend Developer & UI/UX Designer",
-    description:
-      "Crafting high-performance web architecture, design systems, and thoughtful digital interfaces.",
+    title: "jiram",
+    description: siteDescription,
     images: ["/og-image.jpg"],
   },
   robots: {
@@ -98,24 +99,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Schema.org Person & WebSite JSON-LD
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Person",
         "@id": `${siteUrl}/#person`,
-        name: "Jiram",
+        name: "jiram",
         jobTitle: "Frontend Developer & UI/UX Designer",
         url: siteUrl,
         email: "hallo@jiram.nl",
-        sameAs: [],
       },
       {
         "@type": "WebSite",
         "@id": `${siteUrl}/#website`,
         url: siteUrl,
-        name: "Jiram — Portfolio",
+        name: "jiram",
         publisher: { "@id": `${siteUrl}/#person` },
       },
     ],
