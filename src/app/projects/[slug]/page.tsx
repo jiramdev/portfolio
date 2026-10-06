@@ -121,10 +121,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   const gallery = project.gallery ?? [];
-  const primaryDiscipline = project.discipline ?? project.role;
 
   return (
-    <article className="min-h-screen bg-[var(--color-background)] text-[var(--color-text)] pb-[72px]">
+    <article className="min-h-screen bg-[var(--color-background)] text-[var(--color-text)] pb-[110px]">
       <div className="max-w-[1440px] mx-auto px-[16px] md:px-[22px] py-[22px]">
         {/* 1. Headline Statement */}
         <div className="max-w-[1080px] pt-[22px] pb-[58px]">
@@ -134,7 +133,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </div>
 
         {/* 2. Metadata Spec Bar */}
-        <div className="pb-[58px] grid grid-cols-2 sm:grid-cols-4 gap-[22px] items-start">
+        <div className="pb-[58px] grid grid-cols-1 sm:grid-cols-3 gap-[22px] items-start">
           <div className="flex flex-col items-start">
             <span className="text-[14px] font-[700] leading-[1.3] tracking-[-0.24px] text-[var(--color-text)]">
               Client
@@ -156,7 +155,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   rel="noopener noreferrer"
                   className="w-fit inline-block text-[12px] font-[400] leading-[1.4] tracking-[-0.24px] text-[var(--color-text)] underline underline-offset-[3px] decoration-[var(--color-text)] hover:opacity-70 transition-opacity duration-[100ms] [transition-timing-function:var(--ease-anthropic)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-primary)] focus-visible:outline-offset-2 rounded-[2px]"
                 >
-                  {project.websiteUrl.replace(/^https?:\/\//, "")}
+                  {project.websiteLabel ??
+                    project.websiteUrl
+                      .replace(/^https?:\/\//, "")
+                      .replace(/\/$/, "")}
                 </a>
               </div>
             ) : (
@@ -174,21 +176,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               {project.role}
             </span>
           </div>
-
-          <div className="flex flex-col items-start">
-            <span className="text-[14px] font-[700] leading-[1.3] tracking-[-0.24px] text-[var(--color-text)]">
-              Discipline
-            </span>
-            <span className="text-[12px] font-[400] leading-[1.4] tracking-[-0.24px] text-[var(--color-text)] mt-[12px] truncate">
-              {primaryDiscipline}
-            </span>
-          </div>
         </div>
 
         {/* 3. Pure Curated Image & Video Gallery */}
-        <div className="space-y-[22px]">
-          {renderGalleryRhythm(gallery)}
-        </div>
+        <div className="space-y-[22px]">{renderGalleryRhythm(gallery)}</div>
       </div>
     </article>
   );

@@ -130,8 +130,8 @@ export default function Header({
   subtitle = "Frontend Developer & UI/UX Designer",
   year = "2026",
   showCopyright = true,
-  githubUrl = "https://github.com",
-  linkedinUrl = "https://linkedin.com",
+  githubUrl = "https://github.com/jiramdev",
+  linkedinUrl = "https://linkedin.com/in/marijnsnoeren",
 }: HeaderProps) {
   const { phase, isFirstVisit, hasHydrated } = useLoader();
   const displayYear = showCopyright ? `\u00A9 ${year}` : year;

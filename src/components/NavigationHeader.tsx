@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
-import { projects } from "@/data/projects";
+import { projects } from "@/lib/projects";
 
 export default function NavigationHeader() {
   const pathname = usePathname();

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import NavigationHeader from "@/components/NavigationHeader";
+import FloatingDock from "@/components/FloatingDock";
 import { LoaderProvider } from "@/components/PageLoaderContext";
 import "./globals.css";
 
@@ -34,6 +35,7 @@ export default function RootLayout({
         <LoaderProvider>
           <NavigationHeader />
           <main>{children}</main>
+          <FloatingDock />
         </LoaderProvider>
       </body>
     </html>
