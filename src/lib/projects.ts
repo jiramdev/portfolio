@@ -27,6 +27,8 @@ export interface Project {
   description: string;
   disciplines: string[];
   deliverables: string[];
+  /** Optional logo tile for the card badge. Falls back to initials. */
+  logoUrl?: string;
   /** Grid + page header media. First gallery item if omitted. */
   cover: Cover;
   gallery: MediaItem[];
@@ -90,144 +92,79 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "ikea-studio",
-    name: "IKEA",
-    tagline: "Augmented reality interior toolset",
-    timeline: "2023 - 2024",
-    role: "Product Design",
-    client: "IKEA Retail",
-    websiteUrl: "https://ikea.com",
-    disciplines: ["Spatial UX", "Augmented Reality", "Interaction Design"],
-    deliverables: ["AR Scan Primitives", "Catalog Interaction Toolset", "Design Guidelines"],
+    slug: "jiram-brand",
+    name: "Jiram",
+    tagline: "Personal brand identity",
+    timeline: "2026",
+    role: "Brand Identity",
+    client: "Personal",
+    websiteUrl: "https://www.jiram.nl",
+    websiteLabel: "jiram.nl",
+    /** Optional logo tile. Falls back to the project's initials. */
+    logoUrl: "/jiram-mark.svg",
+    disciplines: ["Brand Strategy", "Visual Identity", "Design Systems"],
+    deliverables: ["Logo & Mark", "Color & Type System", "Portfolio Site"],
     summary:
-      "Co-designed and maintained the AR toolset within retailer apps for IKEA worldwide, making interior design tools available for the many. Commissioned by Bakken & Baeck.",
+      "A personal brand identity built from a single geometric mark: a near-black and off-white system carried from favicon to portfolio.",
     description:
-      "Bringing spatial interior design tools directly to everyday customers without requiring LiDAR hardware: co-designed and maintained the AR toolset within IKEA retailer apps worldwide, establishing natural room scanning motions and realistic lighting models.",
+      "The identity is one mark and one palette, applied consistently everywhere it appears. Two folded shapes carry the name, and a near-black on warm off-white palette keeps every surface high contrast and legible. The same tokens that set the favicon set the portfolio, so brand and product are never out of step.",
     order: 2,
     comingSoon: true,
+    // The 5:4 loop matches the card crop exactly, so nothing is letterboxed.
     cover: {
       type: "video",
-      url: "https://framerusercontent.com/assets/r7Hd0ofSCIqWu298GYqCmdoQ.mp4",
-      alt: "IKEA app scanning a room and placing furniture in augmented reality",
-      poster: "https://framerusercontent.com/images/7Mhf5f4JC1DBu8fFYwhFGkP7HHY.jpg",
+      url: "/projects/jiram/jiram-logo-loop-5x4.mp4",
+      poster: "/projects/jiram/jiram-logo-poster-5x4.jpg",
+      alt: "The Jiram mark assembling from two folded shapes",
     },
     gallery: [
       {
-        url: "https://framerusercontent.com/assets/r7Hd0ofSCIqWu298GYqCmdoQ.mp4",
-        alt: "IKEA AR tool detecting room surfaces and guiding the scan",
-        caption: "AR room surface detection and spatial guidance interaction loops.",
-        poster: "https://framerusercontent.com/images/7Mhf5f4JC1DBu8fFYwhFGkP7HHY.jpg",
+        url: "/projects/jiram/jiram-logo-loop.mp4",
+        poster: "/projects/jiram/jiram-logo-poster.jpg",
+        alt: "The Jiram mark assembling from two folded shapes on a dark field",
+        caption: "Primary mark, animated from its two folded halves.",
       },
       {
-        url: "https://framerusercontent.com/images/7Mhf5f4JC1DBu8fFYwhFGkP7HHY.jpg",
-        alt: "IKEA AR furniture placed on a detected floor plane",
-        caption: "3D model placement grid and floor plane anchoring.",
-      },
-      {
-        url: "https://framerusercontent.com/images/JymNjNMkTX8HqO6KMaNkRsN7Po.jpg",
-        alt: "IKEA AR material preview lit by the room's real light",
-        caption: "Material shader preview and real-time lighting calculation.",
-      },
-      {
-        url: "https://framerusercontent.com/images/pWfJZFg9W9Pgu1YJHpxS3n5DyzU.jpg?width=2880&height=2160",
-        alt: "IKEA AR room scan with dimension annotations around the perimeter",
-        caption: "Room perimeter dimensional annotations and boundary limits.",
-      },
-      {
-        url: "https://framerusercontent.com/assets/FX5mimXKX7Yfd5rl6WCOVG5xwo4.webm",
-        alt: "End-to-end IKEA AR staging of a complete living room",
-        caption: "Complete end-to-end furniture staging and AR inspection loop.",
-        poster: "https://framerusercontent.com/images/pWfJZFg9W9Pgu1YJHpxS3n5DyzU.jpg?width=2880&height=2160",
+        url: "/projects/jiram/jiram-logo-poster.jpg",
+        alt: "The completed Jiram mark in cream on near-black",
+        caption: "Final mark: cream on near-black.",
       },
     ],
   },
   {
-    slug: "design-systems-core",
-    name: "Design Systems",
-    tagline: "Cross-platform enterprise tokens",
+    slug: "levensgloed",
+    name: "Levensgloed",
+    tagline: "Holistic practice",
     timeline: "2025",
-    role: "Frontend & Architecture",
-    client: "Enterprise Platform Core",
-    disciplines: ["Design Systems", "Web Architecture", "Accessibility"],
-    deliverables: ["Semantic Token Registry", "Multi-brand UI Engine", "Documentation Kit"],
+    role: "Brand Identity",
+    client: "Levensgloed",
+    logoUrl: "/projects/levensgloed/levensgloed-mark.svg",
+    disciplines: ["Brand Strategy", "Visual Identity", "Art Direction"],
+    deliverables: ["Logo & Mark", "Color & Type System", "Brand Guidelines"],
     summary:
-      "Engineered token pipelines and accessible component primitives for enterprise platforms, reducing front-end regression rates while standardizing multi-brand theming.",
+      "A calm, botanical identity for a holistic practice: a lotus mark and a sage palette built to feel grounded rather than clinical.",
     description:
-      "Architected token distribution pipelines and accessible component primitives across multi-brand organizations, reducing regression rates and standardizing typography, elevation, and color variables.",
+      "The identity needed to read as care, not as a medical brand. A lotus built from three stroked petals sits under three gold dots, drawn in white over a muted sage field, and the same palette carries every touchpoint. Rounded forms and generous space keep the practice approachable while the high-contrast mark stays legible at favicon size.",
     order: 3,
     comingSoon: true,
-    cover: {
-      type: "image",
-      url: "https://framerusercontent.com/images/JymNjNMkTX8HqO6KMaNkRsN7Po.jpg",
-      alt: "Semantic design token registry shown alongside transformed brand themes",
-    },
-    gallery: [
-      {
-        url: "https://framerusercontent.com/images/JymNjNMkTX8HqO6KMaNkRsN7Po.jpg",
-        alt: "Semantic token registry with multi-brand theme transforms",
-        caption: "Semantic token registry and multi-brand theme transforms.",
-      },
-      {
-        url: "https://framerusercontent.com/images/pWfJZFg9W9Pgu1YJHpxS3n5DyzU.jpg?width=2880&height=2160",
-        alt: "Component documentation page showing the typography scale tokens",
-        caption: "Component documentation and typography scale tokens.",
-      },
-      {
-        url: "https://framerusercontent.com/images/7Mhf5f4JC1DBu8fFYwhFGkP7HHY.jpg",
-        alt: "Visual regression suite comparing light and dark token output",
-        caption: "Visual regression verification suite across light and dark tokens.",
-      },
-      {
-        url: "https://framerusercontent.com/assets/7JkzhSJSRlLBF8aCbxCCPUdg.mp4",
-        alt: "Token hot-reloading pipeline updating components live in the browser",
-        caption: "Live token hot-reloading pipeline demonstration.",
-        poster: "https://framerusercontent.com/images/JymNjNMkTX8HqO6KMaNkRsN7Po.jpg",
-      },
-    ],
-  },
-  {
-    slug: "kinetic-interfaces",
-    name: "Kinetic UI",
-    tagline: "Physics-based interaction primitives",
-    timeline: "2026",
-    role: "Interaction Design",
-    client: "R&D Prototype",
-    disciplines: ["Interaction Design", "Motion Physics", "Creative Engineering"],
-    deliverables: ["Gesture Physics Model", "Interactive Prototypes", "Haptic Specs"],
-    summary:
-      "Explored physics-based gestures, spring dynamics, and spatial micro-interactions for next-generation touch and cursor interfaces.",
-    description:
-      "An exploratory investigation into organic physics-based gestures, fluid micro-interactions, and velocity-informed spring dynamics for modern touch and cursor surfaces.",
-    order: 4,
-    comingSoon: true,
+    // The 5:4 loop matches the card crop exactly, so nothing is letterboxed.
     cover: {
       type: "video",
-      url: "https://framerusercontent.com/assets/7JkzhSJSRlLBF8aCbxCCPUdg.mp4",
-      alt: "Kinetic UI prototype showing spring dynamics on a dragged element",
-      poster: "https://framerusercontent.com/images/JymNjNMkTX8HqO6KMaNkRsN7Po.jpg",
+      url: "/projects/levensgloed/levensgloed-logo-loop-5x4.mp4",
+      poster: "/projects/levensgloed/levensgloed-logo-poster-5x4.jpg",
+      alt: "The Levensgloed lotus mark blooming on a sage green field",
     },
     gallery: [
       {
-        url: "https://framerusercontent.com/assets/7JkzhSJSRlLBF8aCbxCCPUdg.mp4",
-        alt: "Kinetic UI prototype with spring dynamics and gesture drag inertia",
-        caption: "Spring dynamics and gesture drag inertia prototype.",
-        poster: "https://framerusercontent.com/images/JymNjNMkTX8HqO6KMaNkRsN7Po.jpg",
+        url: "/projects/levensgloed/levensgloed-logo-loop.mp4",
+        poster: "/projects/levensgloed/levensgloed-logo-poster.jpg",
+        alt: "The Levensgloed lotus mark blooming on a sage green field",
+        caption: "Primary mark, animated as the petals open.",
       },
       {
-        url: "https://framerusercontent.com/images/JymNjNMkTX8HqO6KMaNkRsN7Po.jpg",
-        alt: "Gesture curve velocity map with deceleration timings",
-        caption: "Curve velocity maps and deceleration timings.",
-      },
-      {
-        url: "https://framerusercontent.com/images/7Mhf5f4JC1DBu8fFYwhFGkP7HHY.jpg",
-        alt: "Touch target bounds diagram for tactile response states",
-        caption: "Tactile response bounds and touch targets.",
-      },
-      {
-        url: "https://framerusercontent.com/assets/FX5mimXKX7Yfd5rl6WCOVG5xwo4.webm",
-        alt: "Spatial micro-interaction loop reacting to real-time acceleration",
-        caption: "Spatial micro-interaction loop with real-time acceleration.",
-        poster: "https://framerusercontent.com/images/pWfJZFg9W9Pgu1YJHpxS3n5DyzU.jpg?width=2880&height=2160",
+        url: "/projects/levensgloed/levensgloed-logo-poster.jpg",
+        alt: "The completed Levensgloed lotus mark in white on sage green",
+        caption: "Final mark: white lotus and gold dots on sage.",
       },
     ],
   },
