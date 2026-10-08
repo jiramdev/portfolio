@@ -55,8 +55,10 @@ function ProjectCard({
         </span>
       )}
 
-      {/* Card Metadata Bar */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[10] flex select-none items-center justify-between p-[16px]">
+      {/* Card Metadata Bar. items-end, not items-center: the year then shares the
+          tagline's bottom edge and baseline. Centring it floated the year between
+          the two lines of type. */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[10] flex select-none items-end justify-between p-[16px]">
         <div className="flex items-center gap-[12px]">
           <div className="flex h-[32px] w-[32px] shrink-0 items-center justify-center overflow-hidden rounded-[8px] bg-[var(--color-surface)]/40 text-[11px] font-[700] tracking-[-0.02em] text-[var(--color-on-primary)] backdrop-blur-md">
             {project.logoUrl ? (

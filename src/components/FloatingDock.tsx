@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { EMAIL } from "@/lib/site";
 import { useLoader } from "@/components/PageLoaderContext";
 import { EASE } from "@/lib/motion";
@@ -76,20 +76,45 @@ export default function FloatingDock() {
           <span>Contact</span>
         </a>
 
-        {isProjectPage && (
-          <motion.div
-            initial={{ opacity: 0, width: 0 }}
-            animate={{ opacity: 1, width: "auto" }}
-            transition={{ duration: 0.3, ease: EASE }}
-            className="flex min-h-[44px] items-center gap-[8px] overflow-hidden border-l border-[#ffffff]/15 pl-[12px] pr-[16px] text-[15px] leading-[1.4] tracking-[-0.01em] text-[#ffffff]/60 select-none"
-          >
-            <span
-              className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#faf9f5]"
-              aria-hidden="true"
-            />
-            <span className="whitespace-nowrap">Viewing Project</span>
-          </motion.div>
-        )}
+        {/* AnimatePresence so the chip collapses on the way back to home too:
+            without it the conditional unmount was an instant pop.
+
+            Width only, and the padding lives on the inner div. Animating padding
+            alongside width breaks `width: "auto"`: motion measures the target
+            before the padding has grown, lands on the content width, and the box
+            snaps wider at the end. Padding here would also floor width:0 at its
+            own 29px. Moving both onto the inner div lets the outer box go to a
+            true 0 while overflow-hidden clips the content.
+
+            The exit overrides the ease. EASE is an ease-out, which suits a
+            transform but on width dumps 80% of the travel into the first 30ms
+            and then creeps through the last 30px for over 200ms. That tail is
+            the visible stutter, so the collapse uses ease-in-out instead and
+            keeps moving for the whole duration. */}
+        <AnimatePresence>
+          {isProjectPage && (
+            <motion.div
+              key="viewing-project"
+              initial={{ opacity: 0, width: 0 }}
+              animate={{ opacity: 1, width: "auto" }}
+              exit={{
+                opacity: 0,
+                width: 0,
+                transition: { duration: 0.26, ease: "easeInOut" },
+              }}
+              transition={{ duration: 0.3, ease: EASE }}
+              className="overflow-hidden"
+            >
+              <div className="flex min-h-[44px] items-center gap-[8px] border-l border-[#ffffff]/15 pl-[12px] pr-[16px] text-[15px] leading-[1.4] tracking-[-0.01em] text-[#ffffff]/60 select-none">
+                <span
+                  className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#faf9f5]"
+                  aria-hidden="true"
+                />
+                <span className="whitespace-nowrap">Viewing Project</span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.nav>
     </aside>
   );
