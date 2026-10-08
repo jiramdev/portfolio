@@ -26,6 +26,7 @@ export function RollingText({
   className = "",
   delay = 0,
   skipInitialRoll = true,
+  decorative = false,
 }: {
   text: string;
   className?: string;
@@ -33,6 +34,9 @@ export function RollingText({
   /** Default true keeps the letters readable in the server HTML and without
    *  JS. The intro passes false, where the curtain hides the page anyway. */
   skipInitialRoll?: boolean;
+  /** Hides the letter spans from assistive tech. Use with a sr-only copy of
+   *  the same text, which crawlers and plain-text readers can actually read. */
+  decorative?: boolean;
 }) {
   // mode="popLayout" pops the outgoing line out of flow so the incoming one
   // takes its box: both roll at once, the old pushed up and out while the new
@@ -42,7 +46,8 @@ export function RollingText({
     // would be clipped. Each letter clips itself, which is all the roll needs.
   return (
     <span
-      aria-label={text}
+      aria-label={decorative ? undefined : text}
+      aria-hidden={decorative || undefined}
       className={`relative inline-flex ${className}`}
     >
       <AnimatePresence mode="popLayout" initial={!skipInitialRoll}>
@@ -113,14 +118,26 @@ export function IdentityStack({
         onClick={onTitleClick}
         className="inline-flex min-h-[44px] -my-[10px] items-center text-[15px] font-[700] leading-[1.3] tracking-[-0.01em] text-[var(--color-text)] transition-opacity duration-[100ms] [transition-timing-function:var(--ease-out-expo)] hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-primary)] focus-visible:outline-offset-2"
       >
-        <RollingText text={title} delay={0} skipInitialRoll={skipInitialRoll} />
+        <RollingText
+          text={title}
+          delay={0}
+          skipInitialRoll={skipInitialRoll}
+          decorative
+        />
       </Link>
+
+      {/* Plain-text copies: the letter spans read as "J i r a m" to anything that
+          does not resolve aria-label, and the letters are hidden from AT above. */}
+      <span className="sr-only">{title}</span>
+      <span className="sr-only">{subtitle}</span>
+      <span className="sr-only">{displayYear}</span>
 
       <div className="mt-[10px] text-[15px] font-[400] leading-[1.4] tracking-[-0.01em] text-[var(--color-text)]">
         <RollingText
           text={subtitle}
           delay={0.06}
           skipInitialRoll={skipInitialRoll}
+          decorative
         />
       </div>
 
@@ -129,6 +146,7 @@ export function IdentityStack({
           text={displayYear}
           delay={0.12}
           skipInitialRoll={skipInitialRoll}
+          decorative
         />
       </div>
     </div>
@@ -163,8 +181,10 @@ export default function Header({
           />
         </div>
 
+        {/* -mt-[10px] cancels the title link's -my-[10px], so the 44px icon row
+            centres on the title's text line rather than dropping 10px. */}
         <div
-          className={`-mr-[12px] flex items-center gap-[8px] ${
+          className={`-mr-[12px] -mt-[10px] flex items-center gap-[8px] ${
             showControls ? "pointer-events-auto" : "pointer-events-none select-none opacity-0"
           }`}
         >

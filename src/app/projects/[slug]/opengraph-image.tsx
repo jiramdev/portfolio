@@ -1,12 +1,29 @@
 import { ImageResponse } from "next/og";
-import { getProjectBySlug } from "@/lib/projects";
+import { getProjectBySlug, getPublishedProjects } from "@/lib/projects";
 
 export const alt = "Project cover";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+// One image per project, each with alt text that describes it. Without this
+// every share of every project inherits the generic "Project cover" above.
+export async function generateImageMetadata() {
+  const projects = await getPublishedProjects();
+
+  return projects.map((project) => ({
+    id: project.slug,
+    alt: `${project.name} — ${project.tagline}`,
+    size,
+    contentType,
+  }));
+}
+
+export default async function Image({
+  id,
+}: {
+  id: Promise<string>;
+}) {
+  const slug = await id;
   const project = await getProjectBySlug(slug);
 
   return new ImageResponse(
@@ -23,11 +40,20 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           fontFamily: "sans-serif",
         }}
       >
-        <div style={{ display: "flex", fontSize: "24px", color: "#141413", opacity: 0.7 }}>
+        <div
+          style={{
+            display: "flex",
+            fontSize: "24px",
+            color: "#141413",
+            opacity: 0.7,
+          }}
+        >
           {project?.tagline}
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+        >
           <h1
             style={{
               fontSize: "72px",
@@ -40,7 +66,14 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           >
             {project?.name}
           </h1>
-          <p style={{ fontSize: "24px", color: "#141413", opacity: 0.75, margin: 0 }}>
+          <p
+            style={{
+              fontSize: "24px",
+              color: "#141413",
+              opacity: 0.75,
+              margin: 0,
+            }}
+          >
             {[project?.role, project?.timeline].filter(Boolean).join(" · ")}
           </p>
         </div>
