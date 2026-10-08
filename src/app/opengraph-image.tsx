@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
+import { EMAIL, SITE_DESCRIPTION } from "@/lib/site";
 
-export const runtime = "edge";
 export const alt = "Jiram — Frontend Developer & UI/UX Designer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -63,7 +63,7 @@ export default async function Image() {
               margin: 0,
             }}
           >
-            Crafting design systems, high-performance architecture, and interactive primitives.
+            {SITE_DESCRIPTION}
           </p>
         </div>
 
@@ -79,7 +79,7 @@ export default async function Image() {
           }}
         >
           <span>Available for select projects</span>
-          <span>hallo@jiram.nl</span>
+          <span>{EMAIL}</span>
         </div>
       </div>
     ),

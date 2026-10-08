@@ -1,38 +1,37 @@
 <design-context>
 ---
 version: alpha
-name: Anthropic
-description: "Anthropic is an AI safety and research company that's working to build reliable, interpretable, and steerable AI systems."
-sourceUrl: "https://www.anthropic.com"
+name: Jiram
+description: "Portfolio of a frontend developer and UI/UX designer. Built to show the work, not to decorate it."
+sourceUrl: "https://www.jiram.nl"
 
 colors:
   primary: "#141413"
   on-primary: "#ffffff"
   background: "#faf9f5"
   surface: "#141413"
-  border: "#141413"
   text: "#141413"
-  text-muted: "#faf9f5"
+  text-muted: "#5c5c56"
 
 typography:
   display:
-    fontFamily: "Anthropic Sans, Arial, sans-serif"
+    fontFamily: "Inter, Arial, sans-serif"
     fontSize: 58px
     fontWeight: 700
     lineHeight: 1.1
   heading:
-    fontFamily: "Anthropic Sans, Arial, sans-serif"
+    fontFamily: "Inter, Arial, sans-serif"
     fontSize: 58px
     fontWeight: 700
     lineHeight: 1.1
   body:
-    fontFamily: "Anthropic Sans, Arial, sans-serif"
-    fontSize: 12px
+    fontFamily: "Inter, Arial, sans-serif"
+    fontSize: 15px
     fontWeight: 400
-    lineHeight: 1.4
-    letterSpacing: -0.24px
+    lineHeight: 1.5
+    letterSpacing: -0.01em
   mono:
-    fontFamily: "Anthropic Mono, Arial, sans-serif"
+    fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace"
     fontSize: 16px
     fontWeight: 400
     lineHeight: 1.4
@@ -48,7 +47,7 @@ radius:
 
 shadows:
   card: "rgba(0, 0, 0, 0.01) 0px 2px 2px 0px, rgba(0, 0, 0, 0.02) 0px 4px 4px 0px, rgba(0, 0, 0, 0.04) 0px 16px 24px 0px"
-  elevated: "rgba(0, 0, 0, 0.01) 0px 2px 2px 0px, rgba(0, 0, 0, 0.02) 0px 4px 4px 0px, rgba(0, 0, 0, 0.04) 0px 16px 24px 0px"
+  elevated: "rgba(0, 0, 0, 0.02) 0px 4px 8px 0px, rgba(0, 0, 0, 0.06) 0px 16px 32px 0px, rgba(0, 0, 0, 0.08) 0px 32px 64px 0px"
 
 motion:
   duration-fast: 100ms
@@ -61,87 +60,68 @@ breakpoints: [768px]
 
 ## Rationale
 
-Anthropic's design system reflects a organization positioned at the intersection of cutting-edge AI research and public trust. The palette is deliberately restrained—a near-black primary (#141413) paired with a warm, off-white background (#faf9f5)—creating high contrast and visual clarity without coldness. This choice signals both rigor (the deep charcoal suggests seriousness and stability) and approachability (the cream undertone softens institutional formality). The typography stack centers on a custom sans-serif (Anthropic Sans), reinforcing brand identity while maintaining technical credibility through a dedicated monospace face.
+Deliberately restrained: a near-black ink (#141413) on a warm, off-white page (#faf9f5), with no accent colour at all. Two colours means every contrast decision is already made, so the work in the grid is the only thing on screen competing for attention.
 
-The spacing and sizing strategy is hierarchical but compact. Display and heading scales both anchor at 58px with tight 1.1 line heights, demanding attention for key messages about safety and research leadership. Body text at 12px with negative letter-spacing (-0.24px) tightens the visual rhythm, creating density that rewards close reading—appropriate for an audience expected to engage seriously with research content. The 8-step spacing scale (capped at 72px) ensures predictable, grid-aligned layouts that feel methodical rather than organic.
+Typography is one sans (Inter) plus a mono for anything technical. Body copy sits at 15px with slight negative tracking — readable for long descriptions, tight enough that a card never turns into a paragraph. Project titles run at 58px/700 with 1.1 leading, so a name lands as a statement instead of a label.
 
-Motion is purposefully refined: the easing curve (cubic-bezier(0.16, 1, 0.3, 1)) favors quick, snappy responses at 100–200ms, reinforcing responsiveness without distraction. Shadows are whisper-soft, barely visible at card and elevated levels, maintaining minimalist aesthetic while providing necessary layering cues. A single breakpoint at 768px signals mobile-first thinking with a clean tablet/desktop separation. Together, these decisions project intellectual rigor, trustworthiness, and clarity—essential for a safety-focused AI company building credibility with researchers, practitioners, and the public.
+Motion is fast and eased out (`cubic-bezier(0.16, 1, 0.3, 1)`): 100–200ms for hover and focus, up to 800ms for media reveals. Shadows stay nearly invisible at rest and only lift on hover, so the grid reads as flat tiles until you reach for one.
 
 ## 1. Visual Theme & Atmosphere
 
-The design language is **minimalist institutional**—recalling university research labs and forward-thinking tech rather than playful consumer products. The achromatic core (nearly black surface and cream background) conveys seriousness and neutrality, letting content and product capabilities speak loudly. The warm off-white background (#faf9f5) prevents clinical coldness; it's inviting enough for long-form reading without sacrificing authority.
-
-Generous use of negative space and restrained layering (card shadows are nearly imperceptible) creates an uncluttered, focused environment. The overall mood is **confident but not arrogant**—appropriate for a company discussing safety concerns in AI, where humility and precision matter.
+The design language is **quiet portfolio**: near-black on warm off-white, no ornament. The achromatic core lets the project media be the only loud thing on screen. Generous negative space and barely-there card shadows keep the grid calm until you hover a tile.
 
 ## 2. Color System
 
-**Primary Palette:**
-- **Primary (#141413):** Near-black, used for text, borders, and surfaces. Provides structural anchoring and maximum contrast.
-- **On-Primary (#ffffff):** Pure white for text and elements atop dark surfaces (inverse contrast scenarios).
-- **Background (#faf9f5):** Warm off-white, the dominant page surface. Slight yellow undertone humanizes the interface.
-- **Surface (#141413):** Identical to primary; dark cards and UI containers maintain visual consistency.
-- **Border (#141413):** Same as primary, ensuring borders feel structural and intentional rather than decorative.
-- **Text (#141413):** Defaults to primary, reinforcing monochromatic hierarchy.
-- **Text-Muted (#faf9f5):** Reverse of background—used sparingly for tertiary information or disabled states.
+**Palette:**
+- **Primary (#141413):** Near-black. Text, borders, surfaces. Structural anchoring and maximum contrast.
+- **On-Primary (#ffffff):** Text and controls sitting on dark surfaces (media captions, the floating dock).
+- **Background (#faf9f5):** Warm off-white page surface. The cream undertone keeps it from feeling clinical.
+- **Surface (#141413):** Identical to primary; media frames and the dock use it as a fill.
+- **Text-Muted (#5c5c56):** Secondary text — captions, spec labels, metadata. Stays well clear of WCAG AA (≈6.9:1 on the background).
 
-**Rationale:** The two-color system eliminates ambiguity. Every element is either dark (content, interface) or light (background). Accent colors are absent from the measured tokens, suggesting the site relies on interaction states, opacity shifts, or component-level color for secondary messaging. This restraint amplifies impact when color *is* used (e.g., a CTA button or link).
+**Rationale:** Two colours remove ambiguity. Every element is either dark (content, interface) or light (background); hierarchy comes from size, weight and opacity, never from a new hue.
 
 ## 3. Typography
 
 **Font Families:**
-- **Anthropic Sans:** Custom sans-serif for display, heading, and body. Provides brand singularity and visual consistency across hierarchies.
-- **Anthropic Mono:** Custom monospace for code, data, or technical content. Ensures readability in AI/research contexts.
+- **Inter:** Display, heading, and body.
+- **System mono:** Code, tokens, anything technical. Not loaded as a webfont — fall back to the platform mono until something actually needs it.
 
 **Scale & Hierarchy:**
-- **Display & Heading:** Both 58px, weight 700, line-height 1.1. Compact vertical spacing concentrates visual weight for hero statements ("AI research and products that put safety at the frontier"). The tight leading emphasizes urgency and confidence.
-- **Body:** 12px, weight 400, line-height 1.4, letter-spacing -0.24px. Unusually small (compared to contemporary 16px norms), but the negative tracking tightens spacing, making 12px feel more compact and controlled. Suitable for dense research content, pricing tables, and secondary information.
-- **Mono:** 16px, weight 400, line-height 1.4. Larger than body to ensure code and technical references stand out and remain legible.
+- **Display & Heading:** 58px (project titles), weight 700, line-height 1.1.
+- **Body:** 15px, weight 400, line-height 1.5, letter-spacing -0.01em. Big enough to read comfortably, tight enough that cards stay cards.
+- **Mono:** 16px, weight 400, line-height 1.4.
 
-**Intention:** The system prioritizes density and precision over warm readability. Users visiting Anthropic are expected to be engaged, technically literate readers—the cramped 12px body sends a signal: "serious content ahead."
+**Intention:** Legibility first. This is a portfolio someone reads on a phone in bad light, so nothing important is set below 15px and nothing depends on weight 500 (only 400 and 700 are loaded).
 
 ## 4. Components & Patterns
 
-Based on the harvested CTAs ("Try Claude," "Pricing," "Contact sales," "Download app") and measured tokens, the component library likely includes:
+- **Project card:** 5:4 tile, rounded 16px, media under a bottom scrim with name, tagline and year. The whole card is a link; a video pause button sits above it as a sibling.
+- **Spec pair:** Client and Website, label above value, to the right of the lead paragraph and stacked under each other. On mobile they sit side by side under the paragraph.
+- **Floating dock:** Dark pill, 44px targets, white-on-dark focus ring, with a "Viewing Project" indicator on project pages.
+- **404:** Same type scale as a project page so a bad link still looks like the site.
 
-- **Primary Button:** Dark background (#141413), white text, likely 8px or 16px border-radius (sm or md), subtle card shadow for depth.
-- **Secondary/Link:** Likely dark text on transparent or light background, underline or weight emphasis on hover.
-- **Cards & Containers:** Minimal shadows (card shadow is ~0.01–0.04 opacity), 8–24px radius for soft but modern appearance.
-- **Input Fields:** Dark borders (#141413), light background (#faf9f5), small body text (12px).
-- **Navigation:** Likely horizontal, high-contrast text, minimal visual ornamentation.
-
-**Interaction States:**
-- Hover/Focus: Likely opacity shifts or subtle darkening of backgrounds.
-- Active states: Possibly weight or color shifts (though limited by two-color system).
+**Interaction States:** hover shifts opacity to 70% and lifts the card shadow; focus is a 2px outline in the primary colour with 2px offset.
 
 ## 5. Spacing & Layout
 
-**Base Unit:** 2px, enabling fine-grained control.
+**Scale:** [2, 4, 8, 12, 16, 22, 58, 68] pixels. Page gutter is 16px, 22px from 768px up. Content is capped at 1440px.
 
-**Scale:** [2, 4, 8, 12, 16, 22, 58, 72] pixels. This 8-step scale balances granularity with simplicity.
-- **Micro (2–4px):** Tight letter-spacing, icon-to-text gaps.
-- **Small (8–12px):** Padding within buttons, space between inline elements.
-- **Medium (16–22px):** Section padding, gaps between components.
-- **Large (58–72px):** Major section breaks, hero spacing.
-
-**Layout Grid:** The 8px interval (and 16px double-unit) suggests an 8px or 16px baseline grid. The single breakpoint at 768px indicates a two-tier responsive strategy:
-- **Mobile (<768px):** Single-column, full-width containers, large vertical spacing to accommodate touch.
-- **Tablet/Desktop (≥768px):** Multi-column grids, tighter horizontal spacing.
-
-**Rationale:** Spacing increments are large enough to avoid visual clutter, yet small enough to allow nuanced composition. The 58px and 72px values suggest major section separators—fitting for a narrative-heavy marketing site.
+**Layout Grid:** One breakpoint at 768px.
+- **Mobile (<768px):** Single column, 16px gutter, `pb-[110px]` so the dock never covers the last card.
+- **Tablet/Desktop (≥768px):** Two-column project grid, two-up gallery batches inside project pages.
 
 ## 6. Motion & Interaction
 
-**Timing:**
-- **durationFastMs: 100ms** – Micro-interactions (button press feedback, tooltip fade-in, icon swap).
-- **durationBaseMs: 200ms** – Standard transitions (page scroll, modal entrance, hover state shift).
-- **durationSlowMs: 800ms** – Lengthy animations (hero section reveal, sequential list item fade-in).
+**Timing:** 100ms hover and focus, 200ms entrances and hover shadows, 800ms media reveals.
 
-**Easing:** cubic-bezier(0.16, 1, 0.3, 1) – A custom ease-out curve biased toward snappy, responsive feel. The early jump (0.16 → 1) and quick settle (0.3 → 1) suggest animations that feel immediate and crisp, not floaty or delayed. Ideal for a research-focused brand where responsiveness signals competence.
+**Easing:** cubic-bezier(0.16, 1, 0.3, 1) — an ease-out curve that feels immediate rather than floaty. Exposed as `--ease-out-expo` in CSS and `EASE` in `src/lib/motion.ts`; use one of those, never a third copy.
 
-**Interaction Patterns:**
-- **Buttons:** Likely scale or opacity shift on hover, quick 100–200ms feedback.
-- **Links:** Possible underline animation, color or weight shift.
-- **Scrolling Sections:** Possible fade-in on scroll, staggered reveals for list items (using 200–800ms durations).
+**Motion rules:**
+- The intro runs once per session: ~2.2s with the name centred, then a 1.4s glide into the header slot before the curtain lifts. Clicking it skips to the end. It never runs for reduced-motion visitors.
+- The curtain is server rendered and hidden by CSS; a script at the top of `<body>` reveals it before first paint. Do not set attributes on `<html>` for this — React hydrates it and will report a mismatch.
+- Videos only play while at least half visible, and always have a pause control.
+- Reduced motion: no intro, no autoplay video, near-zero CSS transitions.
 
 ## Accessibility
 
@@ -163,9 +143,9 @@ Similarly excellent for inverse layouts.
 
 ### Minimum Requirements
 
-- **Touch Target Size:** All interactive elements (buttons, links, form inputs) must be at least 44×44px (CSS pixels) to meet WCAG 2.1 Level AAA. Given the compact 12px body text and 58px headings, careful padding/height design is critical; a 12px link in a tight card may require 28–32px of vertical padding to reach the 44px threshold.
+- **Touch Target Size:** All interactive elements (buttons, links, form inputs) must be at least 44×44px (CSS pixels) to meet WCAG 2.1 Level AAA.
 - **Focus Indicator:** All keyboard-navigable elements must have a visible focus state—recommend a 2px solid or outline stroke in the primary color (#141413) with a 2px offset, ensuring it's not obscured by shadows or borders. On dark backgrounds, use #ffffff for contrast.
-- **Motion:** Users who prefer reduced motion (prefers-reduced-motion media query) should receive instant or near-instant transitions (50–100ms) instead of 200–800ms animations. Ensure no parallax or auto-playing video without pause controls.
+- **Motion:** `prefers-reduced-motion` skips the intro, keeps videos on their poster, and flattens CSS transitions. Autoplaying video always has a pause control.
 
 </design-context>
 

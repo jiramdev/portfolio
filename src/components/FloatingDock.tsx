@@ -2,56 +2,48 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
+import { EMAIL } from "@/lib/site";
 import { useLoader } from "@/components/PageLoaderContext";
-
-// Anthropic Design System Motion Tokens
-const anthropicEase = [0.16, 1, 0.3, 1] as const;
+import { EASE } from "@/lib/motion";
 
 export default function FloatingDock() {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const isProjectPage = pathname.startsWith("/projects/");
+  const { isIntroActive } = useLoader();
 
-  const { phase, isFirstVisit, hasHydrated } = useLoader();
-
-  // On first visit, stay hidden until the header has reached 'docked' phase
-  const isVisible = hasHydrated && (!isFirstVisit || phase === "docked");
+  const itemClass =
+    "flex min-h-[44px] items-center gap-[8px] rounded-full px-[16px] text-[15px] leading-[1.4] tracking-[-0.01em] transition-colors duration-[200ms] [transition-timing-function:var(--ease-out-expo)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#ffffff] focus-visible:outline-offset-2 motion-reduce:transition-none";
 
   return (
     <aside
       aria-label="Floating Navigation"
-      className="fixed bottom-[22px] inset-x-0 z-50 flex justify-center pointer-events-none px-[16px] pb-[env(safe-area-inset-bottom)]"
+      className="pointer-events-none fixed inset-x-0 bottom-[22px] z-50 flex justify-center px-[16px] pb-[env(safe-area-inset-bottom)]"
     >
       <motion.nav
-        layout
-        initial={{ opacity: 0, y: 18 }}
-        animate={{
-          opacity: isVisible ? 1 : 0,
-          y: isVisible ? 0 : 18,
-        }}
-        transition={{
-          duration: 0.52,
-          delay: isFirstVisit && phase === "docked" ? 1.0 : 0,
-          ease: anthropicEase,
-          layout: { duration: 0.3, ease: anthropicEase },
-        }}
-        className={`pointer-events-auto flex items-center gap-[4px] p-[4px] rounded-full bg-[#141413] text-[#ffffff] border border-[#141413] shadow-[rgba(0,0,0,0.01)_0px_2px_2px_0px,rgba(0,0,0,0.02)_0px_4px_4px_0px,rgba(0,0,0,0.04)_0px_16px_24px_0px] transform-gpu will-change-[transform,opacity] ${
-          isVisible ? "pointer-events-auto" : "pointer-events-none select-none"
-        }`}
+        initial={false}
+        animate={{ opacity: isIntroActive ? 0 : 1 }}
+        transition={{ duration: 0.52, ease: EASE }}
+        className="pointer-events-auto flex items-center gap-[4px] rounded-full border border-[#141413] bg-[#141413] p-[4px] text-[#ffffff] shadow-[rgba(0,0,0,0.01)_0px_2px_2px_0px,rgba(0,0,0,0.02)_0px_4px_4px_0px,rgba(0,0,0,0.04)_0px_16px_24px_0px]"
       >
-        {/* 1. Home Navigation Action */}
         <Link
           href="/"
-          className={`group relative flex items-center gap-[8px] min-h-[44px] px-[16px] rounded-full text-[12px] leading-[1.4] tracking-[-0.24px] transition-all duration-[200ms] [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#ffffff] focus-visible:outline-offset-2 motion-reduce:transition-none ${
-            isHome
-              ? "bg-[#faf9f5] text-[#141413] font-[700]"
-              : "text-[#ffffff]/80 hover:text-[#ffffff] hover:bg-[#ffffff]/10 font-[400]"
-          }`}
           aria-current={isHome ? "page" : undefined}
+          onClick={(event) => {
+            // Already home: not a navigation, so scroll up by hand.
+            if (!isHome) return;
+            event.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          className={`${itemClass} ${
+            isHome
+              ? "bg-[#faf9f5] font-[700] text-[#141413]"
+              : "font-[400] text-[#ffffff]/80 hover:bg-[#ffffff]/10 hover:text-[#ffffff]"
+          }`}
         >
           <svg
-            className="w-[14px] h-[14px] stroke-current shrink-0"
+            className="h-[14px] w-[14px] shrink-0 stroke-current"
             viewBox="0 0 24 24"
             fill="none"
             strokeWidth="2"
@@ -65,13 +57,12 @@ export default function FloatingDock() {
           <span>Home</span>
         </Link>
 
-        {/* 2. Contact CTA */}
         <a
-          href="mailto:hallo@jiram.nl"
-          className="flex items-center gap-[8px] min-h-[44px] px-[16px] rounded-full text-[12px] font-[400] leading-[1.4] tracking-[-0.24px] text-[#ffffff]/80 hover:text-[#ffffff] hover:bg-[#ffffff]/10 transition-all duration-[200ms] [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#ffffff] focus-visible:outline-offset-2 motion-reduce:transition-none"
+          href={`mailto:${EMAIL}`}
+          className={`${itemClass} font-[400] text-[#ffffff]/80 hover:bg-[#ffffff]/10 hover:text-[#ffffff]`}
         >
           <svg
-            className="w-[14px] h-[14px] stroke-current shrink-0"
+            className="h-[14px] w-[14px] shrink-0 stroke-current"
             viewBox="0 0 24 24"
             fill="none"
             strokeWidth="2"
@@ -85,22 +76,18 @@ export default function FloatingDock() {
           <span>Contact</span>
         </a>
 
-        {/* 3. Viewing Project Indicator (All the way to the right) */}
         {isProjectPage && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, width: 0 }}
-            animate={{ opacity: 1, scale: 1, width: "auto" }}
-            exit={{ opacity: 0, scale: 0.95, width: 0 }}
-            transition={{ duration: 0.3, ease: anthropicEase }}
-            className="flex items-center gap-[8px] pl-[12px] pr-[16px] min-h-[44px] text-[12px] font-[400] leading-[1.4] tracking-[-0.24px] text-[#ffffff]/60 border-l border-[#ffffff]/15 select-none overflow-hidden"
+            initial={{ opacity: 0, width: 0 }}
+            animate={{ opacity: 1, width: "auto" }}
+            transition={{ duration: 0.3, ease: EASE }}
+            className="flex min-h-[44px] items-center gap-[8px] overflow-hidden border-l border-[#ffffff]/15 pl-[12px] pr-[16px] text-[15px] leading-[1.4] tracking-[-0.01em] text-[#ffffff]/60 select-none"
           >
             <span
-              className="w-[6px] h-[6px] rounded-full bg-[#faf9f5] shrink-0"
+              className="h-[6px] w-[6px] shrink-0 rounded-full bg-[#faf9f5]"
               aria-hidden="true"
             />
-            <span className="font-[400] text-[12px] tracking-[-0.24px] whitespace-nowrap">
-              Viewing Project
-            </span>
+            <span className="whitespace-nowrap">Viewing Project</span>
           </motion.div>
         )}
       </motion.nav>

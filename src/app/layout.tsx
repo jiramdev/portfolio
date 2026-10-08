@@ -1,26 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
+import { MotionConfig } from "motion/react";
 import NavigationHeader from "@/components/NavigationHeader";
+import FlyingLoader from "@/components/FlyingLoader";
 import FloatingDock from "@/components/FloatingDock";
+import ScrollToTop from "@/components/ScrollToTop";
 import { LoaderProvider } from "@/components/PageLoaderContext";
+import { INTRO_BOOTSTRAP } from "@/lib/intro";
+import {
+  GITHUB_URL,
+  LINKEDIN_URL,
+  SITE_DESCRIPTION,
+  siteUrl,
+} from "@/lib/site";
 import "./globals.css";
 
 const sansFont = Inter({
   subsets: ["latin"],
   weight: ["400", "700"],
-  variable: "--font-anthropic-sans",
+  variable: "--font-sans",
   display: "swap",
 });
-
-const monoFont = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-anthropic-mono",
-  display: "swap",
-});
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://jiram.nl";
-const siteDescription = "Frontend Developer & UI/UX Designer";
 
 export const viewport: Viewport = {
   themeColor: "#faf9f5",
@@ -28,58 +28,45 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// Icons come from src/app/icon.svg + src/app/apple-icon.png, share images from
+// opengraph-image.tsx. Do not add `icons` or `images` here or they win.
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "jiram",
-    template: "jiram | %s",
+    default: "Jiram — Frontend Developer & UI/UX Designer",
+    template: "%s | Jiram",
   },
-  icons: {
-    icon: "/icon.svg",
-    shortcut: "/icon.svg",
-    apple: "/icon.svg",
-  },
-  description: siteDescription,
+  description: SITE_DESCRIPTION,
+  applicationName: "Jiram",
   keywords: [
     "jiram",
-    "Frontend Developer",
-    "UI/UX Designer",
-    "Design Systems",
-    "Web Development",
+    "frontend developer",
+    "UI/UX designer",
+    "design systems",
+    "web development",
     "Netherlands",
   ],
-  authors: [{ name: "jiram", url: siteUrl }],
-  creator: "jiram",
-  publisher: "jiram",
+  authors: [{ name: "Jiram", url: siteUrl }],
+  creator: "Jiram",
+  publisher: "Jiram",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  alternates: {
-    canonical: "/",
-  },
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "jiram",
-    description: siteDescription,
-    url: siteUrl,
-    siteName: "jiram",
-    locale: "en_US",
     type: "website",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "jiram",
-      },
-    ],
+    locale: "en_US",
+    siteName: "Jiram",
+    title: "Jiram — Frontend Developer & UI/UX Designer",
+    description: SITE_DESCRIPTION,
+    url: siteUrl,
   },
   twitter: {
     card: "summary_large_image",
-    title: "jiram",
-    description: siteDescription,
-    images: ["/og-image.jpg"],
+    title: "Jiram — Frontend Developer & UI/UX Designer",
+    description: SITE_DESCRIPTION,
   },
   robots: {
     index: true,
@@ -105,34 +92,39 @@ export default function RootLayout({
       {
         "@type": "Person",
         "@id": `${siteUrl}/#person`,
-        name: "jiram",
+        name: "Jiram",
         jobTitle: "Frontend Developer & UI/UX Designer",
         url: siteUrl,
         email: "hallo@jiram.nl",
+        sameAs: [GITHUB_URL, LINKEDIN_URL],
       },
       {
         "@type": "WebSite",
         "@id": `${siteUrl}/#website`,
         url: siteUrl,
-        name: "jiram",
+        name: "Jiram",
         publisher: { "@id": `${siteUrl}/#person` },
       },
     ],
   };
 
   return (
-    <html lang="en" className={`${sansFont.variable} ${monoFont.variable}`}>
-      <head>
+    <html lang="en" className={sansFont.variable}>
+      <body className="antialiased bg-[var(--color-background)] text-[var(--color-text)]">
+        {/* Decides play/skip before the intro curtain is painted. */}
+        <script dangerouslySetInnerHTML={{ __html: INTRO_BOOTSTRAP }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-      </head>
-      <body className="antialiased bg-[var(--color-background)] text-[var(--color-text)]">
         <LoaderProvider>
-          <NavigationHeader />
-          <main>{children}</main>
-          <FloatingDock />
+          <MotionConfig reducedMotion="user">
+            <ScrollToTop />
+            <NavigationHeader />
+            <main>{children}</main>
+            <FlyingLoader />
+            <FloatingDock />
+          </MotionConfig>
         </LoaderProvider>
       </body>
     </html>

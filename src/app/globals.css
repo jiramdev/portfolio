@@ -6,138 +6,46 @@
   --color-on-primary: #ffffff;
   --color-background: #faf9f5;
   --color-surface: #141413;
-  --color-border: #141413;
   --color-text: #141413;
-  --color-text-muted: #faf9f5;
-
-  /* Spacing Scale: [2, 4, 8, 12, 16, 22, 58, 68] */
-  --space-2: 2px;
-  --space-4: 4px;
-  --space-8: 8px;
-  --space-12: 12px;
-  --space-16: 16px;
-  --space-22: 22px;
-  --space-58: 58px;
-  --space-68: 68px;
-
-  /* Radii */
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --color-text-muted: #5c5c56;
 
   /* Shadows */
   --shadow-card: rgba(0, 0, 0, 0.01) 0px 2px 2px 0px,
     rgba(0, 0, 0, 0.02) 0px 4px 4px 0px,
     rgba(0, 0, 0, 0.04) 0px 16px 24px 0px;
+  --shadow-elevated: rgba(0, 0, 0, 0.02) 0px 4px 8px 0px,
+    rgba(0, 0, 0, 0.06) 0px 16px 32px 0px,
+    rgba(0, 0, 0, 0.08) 0px 32px 64px 0px;
 
   /* Motion */
-  --ease-anthropic: cubic-bezier(0.16, 1, 0.3, 1);
-  --duration-fast: 100ms;
-  --duration-base: 200ms;
-  --duration-slow: 800ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 body {
   background-color: var(--color-background);
   color: var(--color-text);
-  font-family: var(--font-anthropic-sans), Arial, sans-serif;
-  font-size: 12px;
-  line-height: 1.4;
-  letter-spacing: -0.24px;
+  font-family: var(--font-sans), Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Anthropic Type Helpers */
-.text-anthropic-display {
-  font-size: 58px;
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.5px;
-}
-
-.text-anthropic-body {
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.4;
-  letter-spacing: -0.24px;
-}
-
-.text-anthropic-mono {
-  font-family: var(--font-anthropic-mono), monospace;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.4;
-}
-
-@keyframes anthropicReveal {
-  0% {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-reveal {
-  animation: anthropicReveal 800ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  will-change: transform, opacity;
+/* The intro curtain is server rendered so the animation starts on the first
+   paint. It stays hidden until the script in <body> injects the rule below, so
+   repeat visitors and anyone without JS never see a flash of it. */
+[data-intro-curtain] {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-reveal {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-}
-
-:root {
-  --ease-anthropic: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes rollLetterOut {
-  0% {
-    transform: translateY(0%);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100%);
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
-@keyframes rollLetterIn {
-  0% {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0%);
-    opacity: 1;
-  }
-}
-
-.animate-letter-out {
-  animation: rollLetterOut 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  will-change: transform, opacity;
-}
-
-.animate-letter-in {
-  animation: rollLetterIn 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  will-change: transform, opacity;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-letter-out {
-    display: none !important;
-  }
-  .animate-letter-in {
-    animation: none !important;
-    transform: none !important;
-    opacity: 1 !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

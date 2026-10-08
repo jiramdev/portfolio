@@ -1,32 +1,25 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useLoader } from "@/components/PageLoaderContext";
+import { EASE } from "@/lib/motion";
 
-// Anthropic Design System Tokens
-const anthropicEase = [0.16, 1, 0.3, 1] as const;
-
+// Next remounts template.tsx on every navigation, so there is no outgoing tree
+// to animate out: the transition is an enter only. Opacity plus a short drift
+// from the top, so the page settles under the sticky header instead of popping.
 export default function Template({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const { isFirstVisit, phase, hasHydrated } = useLoader();
-
-  // On initial visit to the root homepage, defer animation control to FlyingLoader / HomeClient
-  const isIntroActive = pathname === "/" && isFirstVisit && phase !== "docked";
-
-  if (!hasHydrated || isIntroActive) {
-    return <div className="w-full">{children}</div>;
-  }
+  const { hasHydrated, isIntroActive } = useLoader();
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 18, scale: 0.994 }}
+      initial={
+        hasHydrated && !isIntroActive
+          ? { opacity: 0, y: 14, scale: 0.995 }
+          : false
+      }
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{
-        duration: 0.52,
-        ease: anthropicEase,
-      }}
-      className="w-full transform-gpu will-change-[transform,opacity]"
+      transition={{ duration: 0.45, ease: EASE }}
+      className="w-full origin-top"
     >
       {children}
     </motion.div>

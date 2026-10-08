@@ -1,8 +1,10 @@
 "use client";
 
-import { useRef, useEffect } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion, type Transition } from "framer-motion";
+import { usePathname } from "next/navigation";
+import { AnimatePresence, motion, type Transition } from "motion/react";
+import { EASE } from "@/lib/motion";
+import { GITHUB_URL, LINKEDIN_URL } from "@/lib/site";
 import { useLoader } from "@/components/PageLoaderContext";
 
 interface HeaderProps {
@@ -14,37 +16,40 @@ interface HeaderProps {
   linkedinUrl?: string;
 }
 
-const anthropicEase = [0.16, 1, 0.3, 1] as const;
-
 const characterTransition: Transition = {
   duration: 0.35,
-  ease: anthropicEase,
+  ease: EASE,
 };
 
 export function RollingText({
   text,
   className = "",
   delay = 0,
-  skipInitialRoll = false,
+  skipInitialRoll = true,
 }: {
   text: string;
   className?: string;
   delay?: number;
+  /** Default true keeps the letters readable in the server HTML and without
+   *  JS. The intro passes false, where the curtain hides the page anyway. */
   skipInitialRoll?: boolean;
 }) {
-  const isFirstRender = useRef(true);
-
-  useEffect(() => {
-    isFirstRender.current = false;
-  }, []);
-
+  // mode="popLayout" pops the outgoing line out of flow so the incoming one
+  // takes its box: both roll at once, the old pushed up and out while the new
+  // rises into the same space.
+  // No overflow-hidden here: popLayout takes the outgoing line out of flow, so the
+    // wrapper is only as wide as the incoming line and a longer outgoing line
+    // would be clipped. Each letter clips itself, which is all the roll needs.
   return (
-    <span className={`inline-flex flex-wrap overflow-hidden ${className}`}>
+    <span
+      aria-label={text}
+      className={`relative inline-flex ${className}`}
+    >
       <AnimatePresence mode="popLayout" initial={!skipInitialRoll}>
         <motion.span
           key={text}
           className="inline-flex flex-wrap"
-          initial={isFirstRender.current && skipInitialRoll ? false : "initial"}
+          initial="initial"
           animate="animate"
           exit="exit"
           transition={{
@@ -55,6 +60,7 @@ export function RollingText({
           {Array.from(text).map((char, index) => (
             <span
               key={`${char}-${index}`}
+              aria-hidden="true"
               className="relative inline-block overflow-hidden"
             >
               <motion.span
@@ -79,9 +85,9 @@ export function RollingText({
 export function IdentityStack({
   title = "Jiram",
   subtitle = "Frontend Developer & UI/UX Designer",
-  year = "2026",
+  year = `${new Date().getFullYear()}`,
   showCopyright = true,
-  skipInitialRoll = false,
+  skipInitialRoll = true,
 }: {
   title?: string;
   subtitle?: string;
@@ -90,34 +96,38 @@ export function IdentityStack({
   skipInitialRoll?: boolean;
 }) {
   const displayYear = showCopyright ? `\u00A9 ${year}` : year;
+  const pathname = usePathname();
+
+  // Clicking the name while already home is not a navigation, so nothing would
+  // scroll. Treat it as "back to top".
+  const onTitleClick = (event: React.MouseEvent) => {
+    if (pathname !== "/") return;
+    event.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
-    <div className="flex flex-col select-none">
+    <div className="flex select-none flex-col">
       <Link
         href="/"
-        className="text-[14px] font-[700] leading-[1.3] tracking-[-0.24px] text-[var(--color-text)] hover:opacity-70 transition-opacity duration-[100ms] [transition-timing-function:var(--ease-anthropic)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-primary)] focus-visible:outline-offset-2 inline-flex items-center min-h-[44px] -my-[12px]"
+        onClick={onTitleClick}
+        className="inline-flex min-h-[44px] -my-[10px] items-center text-[15px] font-[700] leading-[1.3] tracking-[-0.01em] text-[var(--color-text)] transition-opacity duration-[100ms] [transition-timing-function:var(--ease-out-expo)] hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-primary)] focus-visible:outline-offset-2"
       >
-        <RollingText
-          text={title}
-          delay={0}
-          skipInitialRoll={skipInitialRoll}
-        />
+        <RollingText text={title} delay={0} skipInitialRoll={skipInitialRoll} />
       </Link>
 
-      <div className="mt-[12px]">
+      <div className="mt-[10px] text-[15px] font-[400] leading-[1.4] tracking-[-0.01em] text-[var(--color-text)]">
         <RollingText
           text={subtitle}
           delay={0.06}
-          className="text-[12px] font-[400] leading-[1.4] tracking-[-0.24px] text-[var(--color-text)]"
           skipInitialRoll={skipInitialRoll}
         />
       </div>
 
-      <div className="mt-[2px]">
+      <div className="mt-[2px] text-[15px] font-[400] leading-[1.4] tracking-[-0.01em] text-[var(--color-text)]">
         <RollingText
           text={displayYear}
           delay={0.12}
-          className="text-[12px] font-[400] leading-[1.4] tracking-[-0.24px] text-[var(--color-text)]"
           skipInitialRoll={skipInitialRoll}
         />
       </div>
@@ -128,64 +138,34 @@ export function IdentityStack({
 export default function Header({
   title = "Jiram",
   subtitle = "Frontend Developer & UI/UX Designer",
-  year = "2026",
+  year = `${new Date().getFullYear()}`,
   showCopyright = true,
-  githubUrl = "https://github.com/jiramdev",
-  linkedinUrl = "https://linkedin.com/in/marijnsnoeren",
+  githubUrl = GITHUB_URL,
+  linkedinUrl = LINKEDIN_URL,
 }: HeaderProps) {
-  const { phase, isFirstVisit, hasHydrated } = useLoader();
-  const displayYear = showCopyright ? `\u00A9 ${year}` : year;
-
-  const showControls = hasHydrated && (!isFirstVisit || phase === "docked");
+  const { isIntroActive, hasHydrated } = useLoader();
+  const showControls = hasHydrated && !isIntroActive;
 
   return (
-    <header
-      className={`sticky top-0 z-40 w-full transition-colors duration-700 ${
-        showControls
-          ? "bg-[color-mix(in_srgb,var(--color-background)_82%,transparent)] backdrop-blur-md supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--color-background)_82%,transparent)]"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-[1440px] mx-auto px-[16px] md:px-[22px] py-[22px] flex items-start justify-between min-h-[88px]">
-        {/* Left: Identity Slot */}
-        <div id="header-identity-target" className="flex flex-col">
-          {hasHydrated && (!isFirstVisit || phase === "docked") ? (
-            <IdentityStack
-              title={title}
-              subtitle={subtitle}
-              year={year}
-              showCopyright={showCopyright}
-              skipInitialRoll={isFirstVisit && phase === "docked"}
-            />
-          ) : (
-            <div
-              className="opacity-0 pointer-events-none select-none flex flex-col"
-              aria-hidden="true"
-            >
-              <span className="text-[14px] font-[700] leading-[1.3] min-h-[44px] -my-[12px] inline-flex items-center">
-                {title}
-              </span>
-              <span className="mt-[12px] text-[12px] font-[400] leading-[1.4]">
-                {subtitle}
-              </span>
-              <span className="mt-[2px] text-[12px] font-[400] leading-[1.4]">
-                {displayYear}
-              </span>
-            </div>
-          )}
+    <header className="sticky top-0 z-40 w-full bg-[color-mix(in_srgb,var(--color-background)_82%,transparent)] backdrop-blur-md">
+      <div className="mx-auto flex min-h-[88px] max-w-[1440px] items-start justify-between px-[16px] py-[22px] md:px-[22px]">
+        <div
+          id="header-identity-target"
+          className={`flex flex-col ${
+            isIntroActive ? "opacity-0" : "opacity-100"
+          } transition-opacity duration-[400ms] [transition-timing-function:var(--ease-out-expo)] motion-reduce:transition-none`}
+        >
+          <IdentityStack
+            title={title}
+            subtitle={subtitle}
+            year={year}
+            showCopyright={showCopyright}
+          />
         </div>
 
-        {/* Right: Controls */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: showControls ? 1 : 0 }}
-          transition={{
-            duration: 0.6,
-            delay: showControls && isFirstVisit ? 0.2 : 0,
-            ease: anthropicEase,
-          }}
-          className={`flex items-center gap-[8px] -mr-[12px] ${
-            showControls ? "pointer-events-auto" : "pointer-events-none select-none"
+        <div
+          className={`-mr-[12px] flex items-center gap-[8px] ${
+            showControls ? "pointer-events-auto" : "pointer-events-none select-none opacity-0"
           }`}
         >
           <Link
@@ -193,10 +173,10 @@ export default function Header({
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub Profile"
-            className="w-[44px] h-[44px] inline-flex items-center justify-center text-[var(--color-text)] hover:opacity-60 transition-opacity duration-[100ms] [transition-timing-function:var(--ease-anthropic)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-primary)] focus-visible:outline-offset-2 rounded-[8px]"
+            className="inline-flex h-[44px] w-[44px] items-center justify-center rounded-[8px] text-[var(--color-text)] transition-opacity duration-[100ms] [transition-timing-function:var(--ease-out-expo)] hover:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-primary)] focus-visible:outline-offset-2"
           >
             <svg
-              className="w-[18px] h-[18px] fill-current"
+              className="h-[18px] w-[18px] fill-current"
               viewBox="0 0 24 24"
               aria-hidden="true"
             >
@@ -213,17 +193,17 @@ export default function Header({
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn Profile"
-            className="w-[44px] h-[44px] inline-flex items-center justify-center text-[var(--color-text)] hover:opacity-60 transition-opacity duration-[100ms] [transition-timing-function:var(--ease-anthropic)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-primary)] focus-visible:outline-offset-2 rounded-[8px]"
+            className="inline-flex h-[44px] w-[44px] items-center justify-center rounded-[8px] text-[var(--color-text)] transition-opacity duration-[100ms] [transition-timing-function:var(--ease-out-expo)] hover:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-primary)] focus-visible:outline-offset-2"
           >
             <svg
-              className="w-[18px] h-[18px] fill-current"
+              className="h-[18px] w-[18px] fill-current"
               viewBox="0 0 24 24"
               aria-hidden="true"
             >
               <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
             </svg>
           </Link>
-        </motion.div>
+        </div>
       </div>
     </header>
   );

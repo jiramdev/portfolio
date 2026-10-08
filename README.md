@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# jiram.nl
 
-## Getting Started
+Portfolio site for **Jiram** — frontend developer & UI/UX designer.
+Live: **https://www.jiram.nl**
 
-First, run the development server:
+## Stack
+
+| | |
+| --- | --- |
+| Framework | Next.js 16 (App Router, Turbopack), React 19 |
+| Language | TypeScript, strict |
+| Styling | Tailwind CSS v4 + CSS variables in `src/app/globals.css` |
+| Animation | `motion` (imported from `motion/react`) |
+| Fonts | Inter via `next/font` (weights 400 + 700) |
+| Images | `next/image` + `ImageResponse` for generated share images |
+| Hosting | Vercel |
+
+No CMS. Projects are a typed array in `src/lib/projects.ts`.
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+npm run build      # production build
+npm start          # serve the build
+npm run lint       # eslint
+npm run typecheck  # tsc --noEmit
+npm test           # node --test, project data invariants
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Set `NEXT_PUBLIC_SITE_URL` in Vercel (and in `.env.local` if you want to
+preview another host). It drives canonical URLs, `sitemap.xml`, `robots.txt`
+and `og:url`. Defaults to `https://www.jiram.nl`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Add a project
 
-## Learn More
+Everything lives in `src/lib/projects.ts`. Append an object to `projects`
+and give it the next `order`:
 
-To learn more about Next.js, take a look at the following resources:
+```ts
+{
+  slug: "new-project",              // URL: /projects/new-project
+  name: "New Project",
+  tagline: "One line for the card",
+  timeline: "2026",                 // "2025" or "2023 - 2024"
+  role: "Design & Development",
+  client: "Client name",            // optional
+  websiteUrl: "https://…",          // optional
+  websiteLabel: "example.com",      // optional, defaults to the bare host
+  disciplines: ["Interaction Design"],   // in the data, not rendered yet
+  deliverables: ["Web Application"],
+  summary: "One sentence. Used for meta descriptions and link previews.",
+  description: "One or two sentences. Lead paragraph on the project page.",
+  cover: {                          // grid tile + page header
+    type: "video",                  // "image" | "video"
+    url: "https://…/cover.webm",
+    poster: "https://…/cover.jpg",  // required for video
+    alt: "What is literally on screen",
+  },
+  gallery: [                        // first item is usually the cover
+    { url: "https://…/a.jpg", alt: "Describe the image", caption: "Optional caption" },
+    { url: "https://…/b.webm", poster: "https://…/b.jpg", alt: "Describe the video" },
+  ],
+  order: 5,
+}
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Rules the tests enforce (`npm test`):
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `order` values must be unique and ascending — they drive grid order and the
+  sitemap.
+- Every image and video needs real `alt` text describing the media, not the
+  caption.
+- Every video needs a `poster`, so reduced-motion visitors get a still frame.
 
-## Deploy on Vercel
+Set `comingSoon: true` and the project still appears in the grid (with a
+"Coming soon" badge, no link, no hover lift) but gets no page: the route 404s
+and it is left out of the sitemap and of `generateStaticParams`. Drop the flag
+to publish it.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`src/app/projects/[slug]/opengraph-image.tsx` builds the share image from the
+project data automatically — no extra file per project.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Remote images are allowed from `framerusercontent.com` in `next.config.ts`.
+Add other hosts there if you move your media.
+
+## Layout
+
+```
+src/
+  app/
+    layout.tsx              fonts, metadata, JSON-LD, header + dock
+    page.tsx                home: intro + project grid
+    template.tsx            page transition
+    not-found.tsx           styled 404
+    opengraph-image.tsx     home share image
+    icon.svg apple-icon.png favicon + touch icon
+    robots.ts sitemap.ts
+    projects/[slug]/
+      page.tsx              project page
+      opengraph-image.tsx   per-project share image
+  components/
+    Header.tsx              identity + social links
+    NavigationHeader.tsx    the global header
+    FloatingDock.tsx        home / contact / viewing-project pill
+    ProjectsGrid.tsx        server rendered card grid
+    VideoPlayer.tsx         play only on screen, pause control, poster
+    FlyingLoader.tsx        one-time intro: name glides into the header
+    PageLoaderContext.tsx   intro phase machine
+  lib/
+    projects.ts             project data + queries
+    site.ts                 site URL, description, social links
+    intro.ts                sessionStorage key + pre-paint bootstrap script
+    motion.ts               the one easing curve
+```
+
+`design.md` holds the design system: colours, type scale, motion and the
+accessibility rules. Read it before changing styles.
