@@ -62,20 +62,15 @@ export const projects: Project[] = [
       alt: "The Repstr mark assembling from two folded strokes",
       poster: "/projects/repstr/repstr-logo-poster-5x4.jpg",
     },
-    // Just the mark and the app. The other gallery items were framerusercontent
-    // placeholders from before the lavender rebrand.
+    // Just the head animation for now. Everything else that was here came from
+    // framerusercontent, which was placeholder art rather than real Repstr
+    // captures. Add the case study media here when there is some.
     gallery: [
       {
         url: "/projects/repstr/repstr-logo-loop.mp4",
         alt: "The Repstr mark assembling from two folded strokes on lavender",
         caption: "Primary mark, animated from its two folded halves.",
         poster: "/projects/repstr/repstr-logo-poster.jpg",
-      },
-      {
-        url: "/projects/repstr/repstr-loop.mp4",
-        alt: "Repstr active session view with the exercise set tracker",
-        caption: "Active session view and exercise set tracker.",
-        poster: "/projects/repstr/repstr-poster.jpg",
       },
     ],
   },
