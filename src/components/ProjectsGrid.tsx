@@ -49,8 +49,13 @@ function ProjectCard({
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--color-surface)]/80 via-[var(--color-surface)]/15 to-transparent"
       />
 
+      {/* No backdrop-blur on anything sitting over the cover media. WebKit has to
+          snapshot whatever is behind a backdrop-filter every frame; with five of
+          these stacked on playing video that is five backdrop snapshots a frame,
+          which is how the content process runs out of memory on iOS. The tiles
+          are more opaque instead, which reads the same over media. */}
       {soon && (
-        <span className="pointer-events-none absolute right-[16px] top-[16px] z-[10] rounded-full bg-[var(--color-surface)]/60 px-[10px] py-[7px] text-[13px] font-[700] leading-none tracking-[-0.01em] text-[var(--color-on-primary)] backdrop-blur-md">
+        <span className="pointer-events-none absolute right-[16px] top-[16px] z-[10] rounded-full bg-[var(--color-surface)]/75 px-[10px] py-[7px] text-[13px] font-[700] leading-none tracking-[-0.01em] text-[var(--color-on-primary)]">
           Coming soon
         </span>
       )}
@@ -60,7 +65,7 @@ function ProjectCard({
           the two lines of type. */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[10] flex select-none items-end justify-between p-[16px]">
         <div className="flex items-center gap-[12px]">
-          <div className="flex h-[32px] w-[32px] shrink-0 items-center justify-center overflow-hidden rounded-[8px] bg-[var(--color-surface)]/40 text-[11px] font-[700] tracking-[-0.02em] text-[var(--color-on-primary)] backdrop-blur-md">
+          <div className="flex h-[32px] w-[32px] shrink-0 items-center justify-center overflow-hidden rounded-[8px] bg-[var(--color-surface)]/70 text-[11px] font-[700] tracking-[-0.02em] text-[var(--color-on-primary)]">
             {project.logoUrl ? (
               <Image
                 src={project.logoUrl}
