@@ -48,6 +48,7 @@ export const projects: Project[] = [
     client: "Freelance",
     websiteUrl: "https://workouts-xi-eight.vercel.app/",
     websiteLabel: "repstr.app",
+    logoUrl: "/projects/repstr/repstr-mark.svg",
     disciplines: ["Product Architecture", "Design Systems", "Full-Stack Development"],
     deliverables: ["Responsive Web Application", "Workout Logging Engine", "Progression Analytics"],
     summary:
@@ -55,16 +56,23 @@ export const projects: Project[] = [
     description:
       "Repstr removes the friction of workout tracking during training: a mobile-first interface optimized for rapid input, visual routine builders, and real-time exercise volume tracking.",
     order: 1,
-    // Self-hosted and re-encoded. The original was a 989KB VP9 WebM, which iOS
-    // Safari cannot decode at all, so this card could never render on iPhone.
-    // Now h264/yuv420p at 160KB, with a matching poster instead of a 2880px JPEG.
+    // Self-hosted and re-encoded. The original cover was a 989KB VP9 WebM, which
+    // iOS Safari cannot decode at all, so this card could never render on iPhone.
+    // The cover is now the mark loop rather than a screen recording, which is
+    // what a portfolio grid should lead with.
     cover: {
       type: "video",
-      url: "/projects/repstr/repstr-loop-5x4.mp4",
-      alt: "Repstr workout screen showing the exercise set tracker mid-session",
-      poster: "/projects/repstr/repstr-poster-5x4.jpg",
+      url: "/projects/repstr/repstr-logo-loop-5x4.mp4",
+      alt: "The Repstr mark assembling from two folded strokes",
+      poster: "/projects/repstr/repstr-logo-poster-5x4.jpg",
     },
     gallery: [
+      {
+        url: "/projects/repstr/repstr-logo-loop.mp4",
+        alt: "The Repstr mark assembling from two folded strokes on black",
+        caption: "Primary mark, animated from its two folded halves.",
+        poster: "/projects/repstr/repstr-logo-poster.jpg",
+      },
       {
         url: "/projects/repstr/repstr-loop.mp4",
         alt: "Repstr active session view with the exercise set tracker",
