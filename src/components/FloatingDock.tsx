@@ -7,6 +7,11 @@ import { EMAIL } from "@/lib/site";
 import { useLoader } from "@/components/PageLoaderContext";
 import { EASE } from "@/lib/motion";
 
+// Shared by the chip's enter and exit so the dock reads the same speed in both
+// directions. easeInOut, not EASE: an ease-out front-loads the movement and
+// then crawls, which suits a transform but not a width.
+const CHIP_TRANSITION = { duration: 0.26, ease: "easeInOut" } as const;
+
 export default function FloatingDock() {
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -86,23 +91,20 @@ export default function FloatingDock() {
             own 29px. Moving both onto the inner div lets the outer box go to a
             true 0 while overflow-hidden clips the content.
 
-            The exit overrides the ease. EASE is an ease-out, which suits a
-            transform but on width dumps 80% of the travel into the first 30ms
-            and then creeps through the last 30px for over 200ms. That tail is
-            the visible stutter, so the collapse uses ease-in-out instead and
-            keeps moving for the whole duration. */}
+            Both directions share CHIP_TRANSITION. EASE is an ease-out, which
+            suits a transform but on width dumps 80% of the travel into the
+            first 30ms and then creeps through the last 30px for over 200ms.
+            That tail is the visible stutter, and it also made the chip feel
+            like it snapped into place going one way and glided the other, so
+            ease-in-out now runs both directions at the same speed. */}
         <AnimatePresence>
           {isProjectPage && (
             <motion.div
               key="viewing-project"
               initial={{ opacity: 0, width: 0 }}
               animate={{ opacity: 1, width: "auto" }}
-              exit={{
-                opacity: 0,
-                width: 0,
-                transition: { duration: 0.26, ease: "easeInOut" },
-              }}
-              transition={{ duration: 0.3, ease: EASE }}
+              exit={{ opacity: 0, width: 0 }}
+              transition={CHIP_TRANSITION}
               // hidden below sm, so the chip is gone on a 390px screen: with it the
               // dock measured 373px, 96% of the viewport. The mobile header already
               // names the project, so the chip is redundant there. Hidden in CSS
