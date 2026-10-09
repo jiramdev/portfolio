@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, useSyncExternalStore } from "react";
-import { INTRO_KEY } from "@/lib/intro";
+import { hasSeenIntro, markIntroSeen } from "@/lib/intro";
 
 export type AnimationPhase = "idle" | "center" | "gliding" | "docked";
 
@@ -12,7 +12,7 @@ const subscribe = () => () => {};
 
 function readFirstVisit() {
   return (
-    !window.sessionStorage.getItem(INTRO_KEY) &&
+    !hasSeenIntro() &&
     !window.matchMedia("(prefers-reduced-motion: reduce)").matches
   );
 }
@@ -53,14 +53,18 @@ export function LoaderProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (effectivePhase !== "center") return;
 
+    // Flag it as seen the moment it starts, not when it docks. The intro runs
+    // for 3.6s and dockHeader only fires at the very end of it, so anyone who
+    // navigated away mid-intro — tapping a card, pressing back — left the flag
+    // unset and got the full-screen curtain replayed on every back navigation.
+    // It does not cancel the intro in flight; firstVisit is only read on mount.
+    markIntroSeen();
+
     const timer = setTimeout(() => setPhase("gliding"), INTRO_MS);
     return () => clearTimeout(timer);
   }, [effectivePhase]);
 
-  const dockHeader = () => {
-    window.sessionStorage.setItem(INTRO_KEY, "true");
-    setPhase("docked");
-  };
+  const dockHeader = () => setPhase("docked");
 
   return (
     <LoaderContext.Provider

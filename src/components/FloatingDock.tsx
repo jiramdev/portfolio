@@ -103,7 +103,12 @@ export default function FloatingDock() {
                 transition: { duration: 0.26, ease: "easeInOut" },
               }}
               transition={{ duration: 0.3, ease: EASE }}
-              className="overflow-hidden"
+              // hidden below sm, so the chip is gone on a 390px screen: with it the
+              // dock measured 373px, 96% of the viewport. The mobile header already
+              // names the project, so the chip is redundant there. Hidden in CSS
+              // rather than a JS media query, or it would flash on hydration. Above
+              // sm the chip costs 151px of a 640px screen, which is fine.
+              className="hidden overflow-hidden sm:block"
             >
               <div className="flex min-h-[44px] items-center gap-[8px] border-l border-[#ffffff]/15 pl-[12px] pr-[16px] text-[15px] leading-[1.4] tracking-[-0.01em] text-[#ffffff]/60 select-none">
                 <span
