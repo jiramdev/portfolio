@@ -10,11 +10,18 @@ const INTRO_MS = 2200;
 // No external store: the client snapshot is only ever read once on mount.
 const subscribe = () => () => {};
 
+// Read once and cached. The intro writes the seen flag the moment it starts, so
+// re-deriving this from storage on every render flipped it false partway
+// through, which unmounted the curtain before the glide ever ran.
+let firstVisitSnapshot: boolean | null = null;
+
 function readFirstVisit() {
-  return (
-    !hasSeenIntro() &&
-    !window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
+  if (firstVisitSnapshot === null) {
+    firstVisitSnapshot =
+      !hasSeenIntro() &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+  return firstVisitSnapshot;
 }
 
 interface LoaderContextType {
