@@ -25,7 +25,7 @@ function ProjectCard({
   return (
     <article
       // No `group` on a coming soon card: without it nothing inside matches
-// group-hover, so the tile stays still and does not invite a click.
+      // group-hover, so the tile stays still and does not invite a click.
       className={`${soon ? "" : "group "}relative aspect-[5/4] w-full overflow-hidden rounded-[16px] bg-[var(--color-background)] shadow-[var(--shadow-card)] transition-shadow duration-[200ms] [transition-timing-function:var(--ease-out-expo)] ${
         soon ? "" : "hover:shadow-[var(--shadow-elevated)]"
       }`}
@@ -49,11 +49,11 @@ function ProjectCard({
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--color-surface)]/80 via-[var(--color-surface)]/15 to-transparent"
       />
 
-      {/* No backdrop-blur on anything sitting over the cover media. WebKit has to
-          snapshot whatever is behind a backdrop-filter every frame; with five of
-          these stacked on playing video that is five backdrop snapshots a frame,
-          which is how the content process runs out of memory on iOS. The tiles
-          are more opaque instead, which reads the same over media. */}
+      {/* No backdrop-blur on anything sitting over the cover media. WebKit has
+          to snapshot whatever is behind a backdrop-filter every frame; with five
+          of these stacked on playing video that is five backdrop snapshots a
+          frame, which is how the content process runs out of memory on iOS. The
+          tiles are more opaque instead, which reads the same over media. */}
       {soon && (
         <span className="pointer-events-none absolute right-[16px] top-[16px] z-[10] rounded-full bg-[var(--color-surface)]/75 px-[10px] py-[7px] text-[13px] font-[700] leading-none tracking-[-0.01em] text-[var(--color-on-primary)]">
           Coming soon
@@ -93,8 +93,7 @@ function ProjectCard({
         </span>
       </div>
 
-      {/* The whole card is the link, so the video pause button stays a sibling
-          (not nested in an <a>). Coming soon cards get no link at all. */}
+      {/* The whole card is the link. Coming soon cards get no link at all. */}
       {!soon && (
         <Link
           href={`/projects/${project.slug}`}

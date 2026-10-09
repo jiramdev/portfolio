@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState, useSyncExternalStore } from "react";
 import { hasSeenIntro, markIntroSeen } from "@/lib/intro";
 
-export type AnimationPhase = "idle" | "center" | "gliding" | "docked";
+type AnimationPhase = "idle" | "center" | "gliding" | "docked";
 
 const INTRO_MS = 2200;
 
@@ -29,7 +29,6 @@ interface LoaderContextType {
   /** True from the first paint of a first visit until the header docks. */
   isIntroActive: boolean;
   hasHydrated: boolean;
-  startGlide: () => void;
   dockHeader: () => void;
 }
 
@@ -37,7 +36,6 @@ const LoaderContext = createContext<LoaderContextType>({
   phase: "idle",
   isIntroActive: false,
   hasHydrated: false,
-  startGlide: () => {},
   dockHeader: () => {},
 });
 
@@ -79,7 +77,6 @@ export function LoaderProvider({ children }: { children: React.ReactNode }) {
         phase: effectivePhase,
         isIntroActive,
         hasHydrated,
-        startGlide: () => setPhase("gliding"),
         dockHeader,
       }}
     >

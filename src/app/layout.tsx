@@ -8,6 +8,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { LoaderProvider } from "@/components/PageLoaderContext";
 import { INTRO_BOOTSTRAP } from "@/lib/intro";
 import {
+  EMAIL,
   GITHUB_URL,
   LINKEDIN_URL,
   SITE_DESCRIPTION,
@@ -95,7 +96,7 @@ export default function RootLayout({
         name: "Jiram",
         jobTitle: "Frontend Developer & UI/UX Designer",
         url: siteUrl,
-        email: "hallo@jiram.nl",
+        email: EMAIL,
         sameAs: [GITHUB_URL, LINKEDIN_URL],
       },
       {

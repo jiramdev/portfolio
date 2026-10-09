@@ -85,8 +85,8 @@ to publish it.
 `src/app/projects/[slug]/opengraph-image.tsx` builds the share image from the
 project data automatically — no extra file per project.
 
-Remote images are allowed from `framerusercontent.com` in `next.config.ts`.
-Add other hosts there if you move your media.
+All media is self-hosted in `public/projects/<slug>/`, so there is no image
+host allowlist to maintain.
 
 ## Layout
 
@@ -94,9 +94,11 @@ Add other hosts there if you move your media.
 src/
   app/
     layout.tsx              fonts, metadata, JSON-LD, header + dock
-    page.tsx                home: intro + project grid
+    page.tsx                home: the project grid
     template.tsx            page transition
     not-found.tsx           styled 404
+    error.tsx               route error boundary
+    global-error.tsx        root error boundary, catches what error.tsx cannot
     opengraph-image.tsx     home share image
     icon.svg apple-icon.png favicon + touch icon
     robots.ts sitemap.ts
@@ -108,7 +110,7 @@ src/
     NavigationHeader.tsx    the global header
     FloatingDock.tsx        home / contact / viewing-project pill
     ProjectsGrid.tsx        server rendered card grid
-    VideoPlayer.tsx         play only on screen, pause control, poster
+    VideoPlayer.tsx         play only on screen, lazy src, poster
     FlyingLoader.tsx        one-time intro: name glides into the header
     PageLoaderContext.tsx   intro phase machine
   lib/

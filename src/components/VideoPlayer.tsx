@@ -5,25 +5,29 @@ import { useEffect, useRef, useState } from "react";
 // Plays only while at least half the video is on screen, and never for visitors
 // who asked for reduced motion: those keep the poster frame.
 //
-// The src is attached only while that gate is open and removed again when it
-// closes. Every <video> carrying a src opens a media pipeline and fetches at
-// least its metadata, even at preload="metadata", and the white page on iOS is a
-// dead JS context rather than anything in the app throwing. Measuring 10 fast
-// home/project round trips issued 56 mp4 requests with 2-3 playing at once.
-// While there is no src the poster frame stands in, so nothing looks different.
+// The src is attached the first time the video is at least half on screen, and
+// stays attached after that. Attaching lazily matters: every <video> carrying a
+// src opens a media pipeline and fetches at least its metadata, even at
+// preload="metadata", and the white page on iOS was a dead JS context rather
+// than anything in the app throwing. Detaching again was what made it flicker
+// on the way back, so the gate only ever opens. While there is no src the poster
+// frame stands in, so nothing looks different.
 export default function VideoPlayer({
   src,
   alt,
   poster,
-  className = "",
 }: {
   src: string;
   alt: string;
   poster?: string;
-  className?: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [onScreen, setOnScreen] = useState(false);
+  // Latched once the video has been seen. Detaching the src again made it
+  // flicker on the way back: iOS tears the media pipeline down, so re-adding it
+  // flashed the poster and restarted playback from zero. An off-screen video
+  // with a src but paused is inert, which is all we need it to be.
+  const [attached, setAttached] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -36,8 +40,13 @@ export default function VideoPlayer({
         // [entry] straight off it threw a TypeError and took the whole tree down.
         const entry = entries[0];
         if (!entry) return;
-        setOnScreen(entry.intersectionRatio >= 0.5);
-        if (entry.intersectionRatio < 0.5) video.pause();
+        if (entry.intersectionRatio >= 0.5) {
+          setAttached(true);
+          setOnScreen(true);
+        } else {
+          setOnScreen(false);
+          video.pause();
+        }
       },
       { threshold: [0, 0.5, 1] }
     );
@@ -57,10 +66,10 @@ export default function VideoPlayer({
   }, [onScreen]);
 
   return (
-    <div className={`absolute inset-0 ${className}`}>
+    <div className="absolute inset-0">
       <video
         ref={videoRef}
-        src={onScreen ? src : undefined}
+        src={attached ? src : undefined}
         poster={poster}
         muted
         loop

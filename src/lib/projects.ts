@@ -7,7 +7,7 @@ export interface MediaItem {
   poster?: string;
 }
 
-export interface Cover extends MediaItem {
+interface Cover extends MediaItem {
   type: "image" | "video";
 }
 
@@ -25,11 +25,9 @@ export interface Project {
   summary: string;
   /** One or two sentences. Used as the lead paragraph on the project page. */
   description: string;
-  disciplines: string[];
-  deliverables: string[];
   /** Optional logo tile for the card badge. Falls back to initials. */
   logoUrl?: string;
-  /** Grid + page header media. First gallery item if omitted. */
+  /** The grid card media. The project page renders gallery only. */
   cover: Cover;
   gallery: MediaItem[];
   /** Ascending. Drives grid order and the sitemap. */
@@ -49,8 +47,6 @@ export const projects: Project[] = [
     websiteUrl: "https://workouts-xi-eight.vercel.app/",
     websiteLabel: "repstr.app",
     logoUrl: "/projects/repstr/repstr-mark.svg",
-    disciplines: ["Product Architecture", "Design Systems", "Full-Stack Development"],
-    deliverables: ["Responsive Web Application", "Workout Logging Engine", "Progression Analytics"],
     summary:
       "A minimalist, high-performance workout companion and progression tracker built for friction-free exercise logging and volume analysis.",
     description:
@@ -66,6 +62,8 @@ export const projects: Project[] = [
       alt: "The Repstr mark assembling from two folded strokes",
       poster: "/projects/repstr/repstr-logo-poster-5x4.jpg",
     },
+    // Just the mark and the app. The other gallery items were framerusercontent
+    // placeholders from before the lavender rebrand.
     gallery: [
       {
         url: "/projects/repstr/repstr-logo-loop.mp4",
@@ -79,28 +77,6 @@ export const projects: Project[] = [
         caption: "Active session view and exercise set tracker.",
         poster: "/projects/repstr/repstr-poster.jpg",
       },
-      {
-        url: "/projects/repstr/routine-builder.jpg",
-        alt: "Repstr routine builder listing exercises with rep targets and rest timers",
-        caption: "Routine builder with customizable sets, rep targets, and rest timers.",
-      },
-      {
-        url: "/projects/repstr/volume-progression.jpg",
-        alt: "Repstr volume progression chart comparing weekly training load",
-        caption: "Volume progression charts and progressive overload calculations.",
-      },
-      {
-        url: "/projects/repstr/exercise-database.jpg",
-        alt: "Repstr exercise database grouped by muscle group and movement pattern",
-        caption: "Exercise database categorized by muscle group and movement patterns.",
-      },
-      {
-        // The original shipped a 316kbps AAC track on a muted decorative loop.
-        url: "/projects/repstr/repstr-setlog.mp4",
-        alt: "Repstr live set logging with the rest timer counting down",
-        caption: "Live logging and auto-advancing rest timer demonstration.",
-        poster: "/projects/repstr/repstr-setlog-poster.jpg",
-      },
     ],
   },
   {
@@ -112,10 +88,7 @@ export const projects: Project[] = [
     client: "Personal",
     websiteUrl: "https://www.jiram.nl",
     websiteLabel: "jiram.nl",
-    /** Optional logo tile. Falls back to the project's initials. */
     logoUrl: "/jiram-mark.svg",
-    disciplines: ["Brand Strategy", "Visual Identity", "Design Systems"],
-    deliverables: ["Logo & Mark", "Color & Type System", "Portfolio Site"],
     summary:
       "A personal brand identity built from a single geometric mark: a near-black and off-white system carried from favicon to portfolio.",
     description:
@@ -151,8 +124,6 @@ export const projects: Project[] = [
     role: "Brand Identity",
     client: "Levensgloed",
     logoUrl: "/projects/levensgloed/levensgloed-mark.svg",
-    disciplines: ["Brand Strategy", "Visual Identity", "Art Direction"],
-    deliverables: ["Logo & Mark", "Color & Type System", "Brand Guidelines"],
     summary:
       "A calm, botanical identity for a holistic practice: a lotus mark and a sage palette built to feel grounded rather than clinical.",
     description:

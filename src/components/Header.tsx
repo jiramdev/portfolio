@@ -12,8 +12,6 @@ interface HeaderProps {
   subtitle?: string;
   year?: string;
   showCopyright?: boolean;
-  githubUrl?: string;
-  linkedinUrl?: string;
 }
 
 const characterTransition: Transition = {
@@ -23,13 +21,11 @@ const characterTransition: Transition = {
 
 export function RollingText({
   text,
-  className = "",
   delay = 0,
   skipInitialRoll = true,
   decorative = false,
 }: {
   text: string;
-  className?: string;
   delay?: number;
   /** Default true keeps the letters readable in the server HTML and without
    *  JS. The intro passes false, where the curtain hides the page anyway. */
@@ -41,14 +37,14 @@ export function RollingText({
   // mode="popLayout" pops the outgoing line out of flow so the incoming one
   // takes its box: both roll at once, the old pushed up and out while the new
   // rises into the same space.
-  // No overflow-hidden here: popLayout takes the outgoing line out of flow, so the
-    // wrapper is only as wide as the incoming line and a longer outgoing line
-    // would be clipped. Each letter clips itself, which is all the roll needs.
+  // No overflow-hidden here: popLayout takes the outgoing line out of flow, so
+  // the wrapper is only as wide as the incoming line and a longer outgoing line
+  // would be clipped. Each letter clips itself, which is all the roll needs.
   return (
     <span
       aria-label={decorative ? undefined : text}
       aria-hidden={decorative || undefined}
-      className={`relative inline-flex ${className}`}
+      className="relative inline-flex"
     >
       <AnimatePresence mode="popLayout" initial={!skipInitialRoll}>
         <motion.span
@@ -158,8 +154,6 @@ export default function Header({
   subtitle = "Frontend Developer & UI/UX Designer",
   year = `${new Date().getFullYear()}`,
   showCopyright = true,
-  githubUrl = GITHUB_URL,
-  linkedinUrl = LINKEDIN_URL,
 }: HeaderProps) {
   const { isIntroActive, hasHydrated } = useLoader();
   const showControls = hasHydrated && !isIntroActive;
@@ -189,7 +183,7 @@ export default function Header({
           }`}
         >
           <Link
-            href={githubUrl}
+            href={GITHUB_URL}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub Profile"
@@ -209,7 +203,7 @@ export default function Header({
           </Link>
 
           <Link
-            href={linkedinUrl}
+            href={LINKEDIN_URL}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn Profile"

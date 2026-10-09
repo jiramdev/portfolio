@@ -30,20 +30,13 @@ typography:
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: -0.01em
-  mono:
-    fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace"
-    fontSize: 16px
-    fontWeight: 400
-    lineHeight: 1.4
-
 spacing:
   base: 2px
-  scale: [2, 4, 8, 12, 16, 22, 58, 68]
+  scale: [2, 4, 8, 12, 16, 22, 58]
 
 radius:
   sm: 8px
   md: 16px
-  lg: 24px
 
 shadows:
   card: "rgba(0, 0, 0, 0.01) 0px 2px 2px 0px, rgba(0, 0, 0, 0.02) 0px 4px 4px 0px, rgba(0, 0, 0, 0.04) 0px 16px 24px 0px"
@@ -62,7 +55,7 @@ breakpoints: [768px]
 
 Deliberately restrained: a near-black ink (#141413) on a warm, off-white page (#faf9f5), with no accent colour at all. Two colours means every contrast decision is already made, so the work in the grid is the only thing on screen competing for attention.
 
-Typography is one sans (Inter) plus a mono for anything technical. Body copy sits at 15px with slight negative tracking — readable for long descriptions, tight enough that a card never turns into a paragraph. Project titles run at 58px/700 with 1.1 leading, so a name lands as a statement instead of a label.
+Typography is one sans (Inter). Body copy sits at 15px with slight negative tracking — readable for long descriptions, tight enough that a card never turns into a paragraph. Project titles run at 58px/700 with 1.1 leading, so a name lands as a statement instead of a label.
 
 Motion is fast and eased out (`cubic-bezier(0.16, 1, 0.3, 1)`): 100–200ms for hover and focus, up to 800ms for media reveals. Shadows stay nearly invisible at rest and only lift on hover, so the grid reads as flat tiles until you reach for one.
 
@@ -84,8 +77,8 @@ The design language is **quiet portfolio**: near-black on warm off-white, no orn
 ## 3. Typography
 
 **Font Families:**
-- **Inter:** Display, heading, and body.
-- **System mono:** Code, tokens, anything technical. Not loaded as a webfont — fall back to the platform mono until something actually needs it.
+- **Inter:** Display, heading, and body. It is the only family; nothing on the
+  site sets `font-mono`, so there is no mono token.
 
 **Scale & Hierarchy:**
 - **Display & Heading:** 58px (project titles), weight 700, line-height 1.1.
@@ -96,7 +89,7 @@ The design language is **quiet portfolio**: near-black on warm off-white, no orn
 
 ## 4. Components & Patterns
 
-- **Project card:** 5:4 tile, rounded 16px, media under a bottom scrim with name, tagline and year. The whole card is a link; a video pause button sits above it as a sibling.
+- **Project card:** 5:4 tile, rounded 16px, media under a bottom scrim with name, tagline and year. The whole card is a link.
 - **Spec pair:** Client and Website, label above value, to the right of the lead paragraph and stacked under each other. On mobile they sit side by side under the paragraph.
 - **Floating dock:** Dark pill, 44px targets, white-on-dark focus ring, with a "Viewing Project" indicator on project pages.
 - **404:** Same type scale as a project page so a bad link still looks like the site.
@@ -105,7 +98,7 @@ The design language is **quiet portfolio**: near-black on warm off-white, no orn
 
 ## 5. Spacing & Layout
 
-**Scale:** [2, 4, 8, 12, 16, 22, 58, 68] pixels. Page gutter is 16px, 22px from 768px up. Content is capped at 1440px.
+**Scale:** [2, 4, 8, 12, 16, 22, 58] pixels. Page gutter is 16px, 22px from 768px up. Content is capped at 1440px.
 
 **Layout Grid:** One breakpoint at 768px.
 - **Mobile (<768px):** Single column, 16px gutter, `pb-[110px]` so the dock never covers the last card.
@@ -120,7 +113,9 @@ The design language is **quiet portfolio**: near-black on warm off-white, no orn
 **Motion rules:**
 - The intro runs once per session: ~2.2s with the name centred, then a 1.4s glide into the header slot before the curtain lifts. Clicking it skips to the end. It never runs for reduced-motion visitors.
 - The curtain is server rendered and hidden by CSS; a script at the top of `<body>` reveals it before first paint. Do not set attributes on `<html>` for this — React hydrates it and will report a mismatch.
-- Videos only play while at least half visible, and always have a pause control.
+- Videos only play while at least half visible. They carry no controls: they are
+  decoration, they are muted and looping, and `prefers-reduced-motion` visitors
+  get the poster frame instead of playback.
 - Reduced motion: no intro, no autoplay video, near-zero CSS transitions.
 
 ## Accessibility
@@ -145,7 +140,7 @@ Similarly excellent for inverse layouts.
 
 - **Touch Target Size:** All interactive elements (buttons, links, form inputs) must be at least 44×44px (CSS pixels) to meet WCAG 2.1 Level AAA.
 - **Focus Indicator:** All keyboard-navigable elements must have a visible focus state—recommend a 2px solid or outline stroke in the primary color (#141413) with a 2px offset, ensuring it's not obscured by shadows or borders. On dark backgrounds, use #ffffff for contrast.
-- **Motion:** `prefers-reduced-motion` skips the intro, keeps videos on their poster, and flattens CSS transitions. Autoplaying video always has a pause control.
+- **Motion:** `prefers-reduced-motion` skips the intro, keeps videos on their poster, and flattens CSS transitions.
 
 </design-context>
 
