@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { test } from "node:test";
 import {
   getProjectBySlug,
@@ -52,4 +54,28 @@ test("every image carries alt text, every video a poster", () => {
       }
     }
   }
+});
+
+test("every referenced media file exists on disk", () => {
+  // A typo'd path passes the alt and poster tests and ships a broken card, so
+  // check the filesystem too. Remote urls have nothing to check.
+  const missing: string[] = [];
+  const check = (label: string, url: string | undefined) => {
+    if (!url || !url.startsWith("/")) return;
+    if (!existsSync(join(process.cwd(), "public", url))) {
+      missing.push(`${label}: ${url}`);
+    }
+  };
+
+  for (const project of projects) {
+    check(`${project.slug} logoUrl`, project.logoUrl);
+    check(`${project.slug} cover`, project.cover.url);
+    check(`${project.slug} cover poster`, project.cover.poster);
+    for (const item of project.gallery) {
+      check(`${project.slug} gallery`, item.url);
+      check(`${project.slug} gallery poster`, item.poster);
+    }
+  }
+
+  assert.deepEqual(missing, [], `missing media files:\n${missing.join("\n")}`);
 });

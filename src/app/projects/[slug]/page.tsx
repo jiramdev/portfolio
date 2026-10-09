@@ -58,8 +58,11 @@ function MediaCard({
 }) {
   return (
     <figure className="flex w-full flex-col gap-[8px]">
+      {/* No `group` here, so nothing inside matches VideoPlayer's group-hover
+          scale and the gallery media sits still on hover. The grid card keeps
+          the zoom by keeping its own `group`. */}
       <div
-        className={`group relative ${aspectRatio} w-full overflow-hidden rounded-[16px] bg-[var(--color-surface)]/5 shadow-[var(--shadow-card)]`}
+        className={`relative ${aspectRatio} w-full overflow-hidden rounded-[16px] bg-[var(--color-surface)]/5 shadow-[var(--shadow-card)]`}
       >
         {isVideo(item) ? (
           <VideoPlayer src={item.url} poster={item.poster} alt={item.alt} />
