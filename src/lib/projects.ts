@@ -69,7 +69,7 @@ export const projects: Project[] = [
     gallery: [
       {
         url: "/projects/repstr/repstr-logo-loop.mp4",
-        alt: "The Repstr mark assembling from two folded strokes on black",
+        alt: "The Repstr mark assembling from two folded strokes on lavender",
         caption: "Primary mark, animated from its two folded halves.",
         poster: "/projects/repstr/repstr-logo-poster.jpg",
       },
