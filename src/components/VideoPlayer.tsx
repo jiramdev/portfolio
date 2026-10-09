@@ -23,7 +23,12 @@ export default function VideoPlayer({
 
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const observer = new IntersectionObserver(
-      ([entry]) => {
+      (entries) => {
+        // entries can be empty: WebKit delivers an empty list when an observer is
+        // torn down during a history pop or bfcache restore. Destructuring
+        // [entry] straight off it threw a TypeError and took the whole tree down.
+        const entry = entries[0];
+        if (!entry) return;
         if (entry.isIntersecting && !motion.matches) {
           void video.play().catch(() => {});
         } else {
