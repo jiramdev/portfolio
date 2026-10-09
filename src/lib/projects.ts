@@ -55,39 +55,43 @@ export const projects: Project[] = [
     description:
       "Repstr removes the friction of workout tracking during training: a mobile-first interface optimized for rapid input, visual routine builders, and real-time exercise volume tracking.",
     order: 1,
+    // Self-hosted and re-encoded. The original was a 989KB VP9 WebM, which iOS
+    // Safari cannot decode at all, so this card could never render on iPhone.
+    // Now h264/yuv420p at 160KB, with a matching poster instead of a 2880px JPEG.
     cover: {
       type: "video",
-      url: "https://framerusercontent.com/assets/FX5mimXKX7Yfd5rl6WCOVG5xwo4.webm",
+      url: "/projects/repstr/repstr-loop-5x4.mp4",
       alt: "Repstr workout screen showing the exercise set tracker mid-session",
-      poster: "https://framerusercontent.com/images/pWfJZFg9W9Pgu1YJHpxS3n5DyzU.jpg?width=2880&height=2160",
+      poster: "/projects/repstr/repstr-poster-5x4.jpg",
     },
     gallery: [
       {
-        url: "https://framerusercontent.com/assets/FX5mimXKX7Yfd5rl6WCOVG5xwo4.webm",
+        url: "/projects/repstr/repstr-loop.mp4",
         alt: "Repstr active session view with the exercise set tracker",
         caption: "Active session view and exercise set tracker.",
-        poster: "https://framerusercontent.com/images/pWfJZFg9W9Pgu1YJHpxS3n5DyzU.jpg?width=2880&height=2160",
+        poster: "/projects/repstr/repstr-poster.jpg",
       },
       {
-        url: "https://framerusercontent.com/images/pWfJZFg9W9Pgu1YJHpxS3n5DyzU.jpg?width=2880&height=2160",
+        url: "/projects/repstr/routine-builder.jpg",
         alt: "Repstr routine builder listing exercises with rep targets and rest timers",
         caption: "Routine builder with customizable sets, rep targets, and rest timers.",
       },
       {
-        url: "https://framerusercontent.com/images/JymNjNMkTX8HqO6KMaNkRsN7Po.jpg",
+        url: "/projects/repstr/volume-progression.jpg",
         alt: "Repstr volume progression chart comparing weekly training load",
         caption: "Volume progression charts and progressive overload calculations.",
       },
       {
-        url: "https://framerusercontent.com/images/7Mhf5f4JC1DBu8fFYwhFGkP7HHY.jpg",
+        url: "/projects/repstr/exercise-database.jpg",
         alt: "Repstr exercise database grouped by muscle group and movement pattern",
         caption: "Exercise database categorized by muscle group and movement patterns.",
       },
       {
-        url: "https://framerusercontent.com/assets/7JkzhSJSRlLBF8aCbxCCPUdg.mp4",
+        // The original shipped a 316kbps AAC track on a muted decorative loop.
+        url: "/projects/repstr/repstr-setlog.mp4",
         alt: "Repstr live set logging with the rest timer counting down",
         caption: "Live logging and auto-advancing rest timer demonstration.",
-        poster: "https://framerusercontent.com/images/pWfJZFg9W9Pgu1YJHpxS3n5DyzU.jpg?width=2880&height=2160",
+        poster: "/projects/repstr/repstr-setlog-poster.jpg",
       },
     ],
   },
